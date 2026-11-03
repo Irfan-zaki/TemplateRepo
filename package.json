@@ -1,0 +1,17 @@
+{
+  "name": "peoplepay360-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm --filter web dev",
+    "dev:mock": "pnpm --filter web dev:mock",
+    "dev:real": "pnpm --filter web dev:real",
+    "build": "pnpm --filter web build",
+    "db:seed": "pnpm --filter api db:seed",
+    "check:mock-leakage": "node scripts/check-mock-leakage.mjs"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5"
+  }
+}
+
