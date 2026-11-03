@@ -1,4 +1,4 @@
-# AI Agent Guidelines & Architecture Rules
+  # AI Agent Guidelines & Architecture Rules
 
 ## Mock Data Management Rules — MANDATORY
 

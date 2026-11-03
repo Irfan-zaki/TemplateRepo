@@ -1,0 +1,25 @@
+---
+description: PeoplePay360 UI — no gradients, no emoji, strict DESIGN.md colors
+globs: apps/web/**/*.{tsx,ts,css,html}
+alwaysApply: true
+---
+
+# Web UI design (agent must follow)
+
+Source of truth: `apps/web/DESIGN.md`. Do not invent a second palette.
+
+## Forbidden
+
+- **Gradients:** no `linear-gradient`, `radial-gradient`, `conic-gradient`, `bg-gradient-*`, `from-` / `via-` / `to-` washes, mesh/shine overlays.
+- **Emoji in the DOM:** no ⚠️ ✨ 🚀 🎉 ✅ ❌ 🟢 🔴 or similar in banners, buttons, labels, empty states, or tables. Use Lucide or Badge text.
+- **Off-palette status:** do not use `#2563eb`, `#ef4444`, `#22c55e`, `#fef2f2`, `#991b1b`, Odoo purple, or any red/green not in DESIGN.md.
+
+## Status / error / success (use only these)
+
+| State | Accent | Surface | Text | Border |
+| --- | --- | --- | --- | --- |
+| Success | `#10b981` | `#dcfce7` | `#14532d` | `#86efac` |
+| Warning | `#f59e0b` | `#fef9c3` | `#713f12` | `#fde047` |
+| Danger / error | `#f43f5e` | `#fee2e2` | `#7f1d1d` | `#fca5a5` |
+
+Ink `#0f172a`, canvas `#f8fafc`, card `#ffffff`. Solid fills, 1.5px borders, hard offset shadows — no blur elevation.

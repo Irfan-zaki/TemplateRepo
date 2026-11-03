@@ -1,6 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { App } from "./App";
+import "../styles/tokens.css";
 
 async function bootstrap() {
   const apiMode = import.meta.env.VITE_API_MODE ?? "real";

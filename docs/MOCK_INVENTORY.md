@@ -18,6 +18,7 @@
 | **Leave requests** | `GET /api/time-off/requests` | Tashfeen | `GET /api/time-off/requests` | `MOCK ONLY` | Fixture: `time-off.fixture.ts` |
 | **Salary rules** | `GET /api/salary-rules` | Irfan | `GET /api/salary-rules` | `MOCK ONLY` | Fixture: `payroll.fixture.ts` |
 | **Payruns** | `GET /api/payruns` | Irfan | `GET /api/payruns` | `MOCK ONLY` | Fixture: `payroll.fixture.ts` |
+| **Auth / Signup** | `POST /api/auth/signup` | Arsh / Team | `POST /api/auth/signup` | `MOCK ONLY` | Fixture: `auth.fixture.ts` |
 
 ---
 
