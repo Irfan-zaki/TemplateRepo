@@ -1,64 +1,98 @@
 :root {
   /* ==========================================================================
-     BRAND COLOR TOKENS (EDIT HERE TO CUSTOMIZE YOUR THEME)
+     1. TYPOGRAPHY SYSTEM (Inter + JetBrains Mono)
      ========================================================================== */
-  
-  /* Primary Brand Color: Odoo Purple Theme (Used for buttons, key actions, brand marks) */
-  --color-primary: #714B67;
-  --color-primary-hover: #5d3d54;
 
-  /* Secondary Brand Color: Odoo Teal / Complementary (Used for secondary tags, links) */
-  --color-secondary: #017E84;
-  --color-secondary-hover: #016267;
+  /* Font Families */
+  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
-  /* Tertiary Brand Color: Warm Gold / Accent (Used for badges, highlights) */
-  --color-tertiary: #E59866;
+  /* Global Typography Scale */
+  --text-xs: 12px;     /* Technical metadata */
+  --text-sm: 13px;     /* Helper text, secondary copy */
+  --text-base: 15px;   /* Default body text, inputs */
+  --text-lg: 18px;     /* Card headings */
+  --text-xl: 22px;     /* Section headings */
+  --text-2xl: 28px;    /* Page headings */
+
+  /* Font Weights */
+  --font-regular: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+
+  /* Line Heights */
+  --leading-normal: 1.5;
+  --leading-tight: 1.25;
+
+  /* Component Specific Typography */
+  --font-size-label: 14px;
+  --font-weight-label: 500;
+  --font-size-input: 15px;
+  --font-weight-input: 400;
+  --font-size-button: 15px;
+  --font-weight-button: 600;
+  --font-size-secondary: 13px;
+  --font-size-tech: 12px;
 
   /* ==========================================================================
-     NEUTRAL & BACKGROUND TOKENS
-     ========================================================================== */
-  --color-ink: #0f172a;              /* High-contrast ink for borders, shadows, text */
-  --color-canvas: #FBF9F5;           /* Beige / Off-White background canvas */
-  --color-card: #ffffff;             /* Card surface background */
-  --color-muted: #F3EFEA;            /* Warm muted surface for headers & code blocks */
-  --color-subtle: #6B7280;           /* Secondary / helper text */
-
-  /* ==========================================================================
-     SEMANTIC STATUS TOKENS
+     2. GLOBAL COLOUR SYSTEM (Plum-based branding & Neutral foundations)
      ========================================================================== */
 
-  /* Error / Danger: Warm Yellow Theme (As requested) */
-  --color-danger: #D97706;           /* Yellow/Amber error accent */
-  --color-danger-surface: #FEF9C3;   /* Light yellow surface */
-  --color-danger-text: #713F12;      /* Deep high-contrast text on yellow */
-  --color-danger-border: #FACC15;    /* Crisp yellow border */
+  --color-primary: #704B68;          /* Plum primary brand & CTA */
+  --color-primary-hover: #5d3d54;    /* Plum hover state */
+  --color-secondary: #017E84;        /* Secondary brand accent */
+  --color-tertiary: #E59866;         /* Warm gold accent */
 
-  /* Success Status (Emerald/Mint) */
+  --color-text-primary: #111827;     /* Dark navy primary text */
+  --color-text-secondary: #526071;   /* Slate secondary text */
+  --color-background: #FAF8F5;       /* Warm beige/off-white canvas */
+  --color-surface: #FFFFFF;          /* Pure white card/form surface */
+  --color-border: #E5E7EB;           /* Subtle neutral border */
+
+  /* Backward Compatibility Aliases */
+  --color-ink: var(--color-text-primary);
+  --color-canvas: var(--color-background);
+  --color-card: var(--color-surface);
+  --color-subtle: var(--color-text-secondary);
+  --color-muted: #F3EFEA;
+
+  /* Semantic Status Tokens (Preserved) */
   --color-success: #10b981;
   --color-success-surface: #dcfce7;
   --color-success-text: #14532d;
   --color-success-border: #86efac;
 
-  /* Caution / Warning Status */
   --color-warning: #f59e0b;
   --color-warning-surface: #fef9c3;
   --color-warning-text: #713f12;
   --color-warning-border: #fde047;
 
-  /* Neutral Status */
+  --color-danger: #D97706;           /* Yellow/Amber error accent */
+  --color-danger-surface: #FEF9C3;   /* Light yellow alert background */
+  --color-danger-text: #713F12;      /* Deep legible amber/brown text */
+  --color-danger-border: #FACC15;    /* Crisp yellow border */
+
   --color-neutral-surface: #F3EFEA;
-  --color-neutral-text: #0f172a;
+  --color-neutral-text: #111827;
   --color-neutral-border: #D1D5DB;
 
   /* ==========================================================================
-     TYPOGRAPHY TOKENS
+     3. SPACING SCALE (Standardised 4px, 8px, 12px, 16px, 24px, 32px, 48px)
      ========================================================================== */
-  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
 
   /* ==========================================================================
-     NEO-BRUTALIST ELEVATION & BORDERS
+     4. ELEVATION, RADIUS & BORDERS
      ========================================================================== */
+
   --shadow-hard-sm: 1px 1px 0px var(--color-ink);
   --shadow-hard: 2px 2px 0px var(--color-ink);
   --shadow-hard-lg: 3px 3px 0px var(--color-ink);
@@ -75,7 +109,10 @@
   --transition-press: all 0.1s ease-in-out;
 }
 
-/* Global CSS Reset & Base */
+/* ==========================================================================
+   GLOBAL BASE & RESET
+   ========================================================================== */
+
 *,
 *::before,
 *::after {
@@ -86,20 +123,28 @@ body {
   margin: 0;
   padding: 0;
   font-family: var(--font-sans);
-  background-color: var(--color-canvas);
-  color: var(--color-ink);
-  line-height: 1.5;
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Tabular Numbers for Monospace Fields */
+/* Headings Base */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-sans);
+  color: var(--color-text-primary);
+  line-height: var(--leading-tight);
+}
+
+/* Monospace Class for Technical Data & Numerical Alignment */
 .font-mono {
   font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;
 }
 
-/* Neo-brutalist Micro-Interaction Utility */
+/* Pressable Utility */
 .pressable {
   transition: var(--transition-press);
 }
@@ -109,7 +154,7 @@ body {
   box-shadow: var(--shadow-hard-sm) !important;
 }
 
-/* Focus Ring */
+/* Form Controls Base Focus */
 input:focus,
 select:focus,
 textarea:focus,

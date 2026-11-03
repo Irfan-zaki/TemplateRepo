@@ -64,26 +64,34 @@ Every success, warning, and error surface in the app uses **these tokens only**.
 
 ## 3. Typography tokens
 
-Load later via Google Fonts in `index.html` (not in this docs pass).
+Loaded via Google Fonts in `index.html`.
 
 | Role | Family | CSS token | Weights |
 | --- | --- | --- | --- |
-| UI and headings | **Plus Jakarta Sans** | `--font-sans` | 400 body, 600 UI/emphasis, 700 headings and badges |
-| IDs, money, timestamps | **JetBrains Mono** | `--font-mono` | Regular + `font-variant-numeric: tabular-nums` |
+| UI, headings, forms, tables | **Inter** | `--font-sans` | 400 Regular, 500 Medium, 600 Semibold, 700 Bold |
+| IDs, money, technical metadata | **JetBrains Mono** | `--font-mono` | 400 Regular, 500 Medium, 600 Semibold + `font-variant-numeric: tabular-nums` |
 
 ### Type scale
 
-| Element | Size | Weight | Notes |
-| --- | --- | --- | --- |
-| App title | `1.25rem` | 700 | Plus Jakarta Sans, ink |
-| Page heading (`h2`) | `1.125rem`–`1.25rem` | 700 | Tight margin under title |
-| Body / helper | `0.875rem` | 400 | Helper uses `--color-subtle` |
-| Button `md` | `0.875rem` | 600 | |
-| Button `sm` | `0.8125rem` | 600 | |
-| Table header | `0.75rem` | 700 | Uppercase, slight letter-spacing, ink on `--color-muted` |
-| Badge | `0.75rem` | 700 | Uppercase, `letter-spacing: 0.03em` |
+| Token | Size | Weight | Usage |
+|---|---:|---:|---|
+| `text-xs` | `12px` | 400 | Technical metadata, table headers |
+| `text-sm` | `13px` | 400 | Helper text, secondary copy |
+| `text-base` | `15px` | 400 | Default body text, inputs |
+| `text-lg` | `18px` | 600 | Card headings |
+| `text-xl` | `22px` | 600 | Section headings, dialog titles |
+| `text-2xl` | `28px` | 600 | Page headings |
 
-**Mono is required** for employee codes (`EMP-001`), currency (`$5,000.00`), and clock times (`08:55 AM`). Do not use the UI sans for those cells.
+Additional rules:
+- Form labels: 14px, weight 500 (`--font-size-label`).
+- Input text: 15–16px, weight 400 (`--font-size-input`).
+- Buttons: 15–16px, weight 600 (`--font-size-button`).
+- Secondary text: 13–14px (`--font-size-secondary`).
+- Technical labels: 12–13px using JetBrains Mono (`--font-size-tech`).
+- Body line-height: 1.5 (`--leading-normal`).
+- Heading line-height: 1.25 (`--leading-tight`).
+
+**Mono is required selectively** for employee codes (`EMP-001`), currency (`$5,000.00`), clock times (`08:55 AM`), and technical IDs. Do not use JetBrains Mono for ordinary paragraphs, form labels, navigation or general user-facing content.
 
 ---
 
@@ -241,7 +249,7 @@ The product UI is enterprise HR/Payroll. Emoji make it look generated and unprof
 
 This file is docs only. Later work, in order:
 
-1. Add Google Fonts (Plus Jakarta Sans + JetBrains Mono) in `index.html`.
+1. Add Google Fonts (Inter + JetBrains Mono) in `index.html`.
 2. Add `src/styles/tokens.css` (or equivalent) with the CSS variables above; import from `main.tsx`.
 3. Install `lucide-react` when the first action icon is needed.
 4. Add Radix packages only with the first dialog/dropdown/popover.

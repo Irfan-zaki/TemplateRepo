@@ -30,10 +30,11 @@ export const App: React.FC = () => {
               borderBottom: "var(--border-ink)",
               padding: "7px 16px",
               textAlign: "center",
-              fontWeight: 700,
-              fontSize: "0.75rem",
-              letterSpacing: "0.06em",
-              textTransform: "uppercase"
+              fontWeight: 600,
+              fontSize: "var(--text-xs, 12px)",
+              letterSpacing: "0.05em",
+              textTransform: "uppercase",
+              fontFamily: "var(--font-sans)"
             }}
           >
             DEVELOPMENT MOCK MODE ACTIVE &mdash; REQUESTS INTERCEPTED BY MSW SERVICE WORKER
@@ -46,10 +47,11 @@ export const App: React.FC = () => {
               borderBottom: "var(--border-ink)",
               padding: "7px 16px",
               textAlign: "center",
-              fontWeight: 700,
-              fontSize: "0.75rem",
-              letterSpacing: "0.06em",
-              textTransform: "uppercase"
+              fontWeight: 600,
+              fontSize: "var(--text-xs, 12px)",
+              letterSpacing: "0.05em",
+              textTransform: "uppercase",
+              fontFamily: "var(--font-sans)"
             }}
           >
             REAL API MODE &mdash; CONNECTED TO FASTIFY BACKEND &amp; POSTGRESQL
@@ -73,10 +75,11 @@ export const App: React.FC = () => {
             borderBottom: "var(--border-ink)",
             padding: "7px 16px",
             textAlign: "center",
-            fontWeight: 700,
-            fontSize: "0.75rem",
-            letterSpacing: "0.06em",
-            textTransform: "uppercase"
+            fontWeight: 600,
+            fontSize: "var(--text-xs, 12px)",
+            letterSpacing: "0.05em",
+            textTransform: "uppercase",
+            fontFamily: "var(--font-sans)"
           }}
         >
           DEVELOPMENT MOCK MODE ACTIVE &mdash; REQUESTS INTERCEPTED BY MSW SERVICE WORKER
@@ -89,10 +92,11 @@ export const App: React.FC = () => {
             borderBottom: "var(--border-ink)",
             padding: "7px 16px",
             textAlign: "center",
-            fontWeight: 700,
-            fontSize: "0.75rem",
-            letterSpacing: "0.06em",
-            textTransform: "uppercase"
+            fontWeight: 600,
+            fontSize: "var(--text-xs, 12px)",
+            letterSpacing: "0.05em",
+            textTransform: "uppercase",
+            fontFamily: "var(--font-sans)"
           }}
         >
           REAL API MODE &mdash; CONNECTED TO FASTIFY BACKEND &amp; POSTGRESQL
@@ -102,7 +106,7 @@ export const App: React.FC = () => {
       {/* Header with Neo-Brutalist Frame */}
       <header
         style={{
-          backgroundColor: "var(--color-card)",
+          backgroundColor: "var(--color-surface)",
           borderBottom: "var(--border-ink)",
           padding: "1rem 2rem",
           display: "flex",
@@ -113,22 +117,22 @@ export const App: React.FC = () => {
         <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
           <div
             style={{
-              width: "30px",
-              height: "30px",
-              backgroundColor: "var(--color-ink)",
+              width: "32px",
+              height: "32px",
+              backgroundColor: "var(--color-primary)",
               color: "#ffffff",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              borderRadius: "4px",
-              fontWeight: 800,
-              fontSize: "1rem",
-              fontFamily: "var(--font-mono)"
+              borderRadius: "var(--radius-badge, 4px)",
+              fontWeight: 700,
+              fontSize: "var(--text-base, 15px)",
+              fontFamily: "var(--font-sans)"
             }}
           >
             P
           </div>
-          <h1 style={{ margin: 0, fontSize: "1.25rem", fontWeight: 800, color: "var(--color-ink)" }}>
+          <h1 style={{ margin: 0, fontSize: "var(--text-xl, 22px)", fontWeight: 700, color: "var(--color-text-primary)" }}>
             PeoplePay360
           </h1>
           <Badge variant={isMockMode ? "warning" : "success"}>
@@ -137,7 +141,7 @@ export const App: React.FC = () => {
         </div>
 
         <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-          <span className="font-mono" style={{ fontSize: "0.8125rem", color: "var(--color-subtle)" }}>
+          <span className="font-mono" style={{ fontSize: "var(--text-xs, 12px)", color: "var(--color-text-secondary)" }}>
             ONE API &bull; TWO DATA SOURCES
           </span>
           <Button
@@ -150,13 +154,13 @@ export const App: React.FC = () => {
         </div>
       </header>
 
-      {/* Navigation Tabs (DESIGN.md Section 7: Ink active underline, not blue) */}
+      {/* Navigation Tabs (DESIGN.md Section 7: Primary active underline) */}
       <nav
         style={{
           display: "flex",
           gap: "1.5rem",
           padding: "0 2rem",
-          backgroundColor: "var(--color-card)",
+          backgroundColor: "var(--color-surface)",
           borderBottom: "var(--border-ink)"
         }}
       >
@@ -176,11 +180,11 @@ export const App: React.FC = () => {
                 border: "none",
                 background: "none",
                 cursor: "pointer",
-                fontWeight: isActive ? 700 : 500,
-                fontSize: "0.875rem",
+                fontWeight: isActive ? 600 : 400,
+                fontSize: "var(--text-base, 15px)",
                 fontFamily: "var(--font-sans)",
-                color: isActive ? "var(--color-ink)" : "var(--color-subtle)",
-                borderBottom: isActive ? "2px solid var(--color-ink)" : "2px solid transparent",
+                color: isActive ? "var(--color-text-primary)" : "var(--color-text-secondary)",
+                borderBottom: isActive ? "2px solid var(--color-primary)" : "2px solid transparent",
                 marginBottom: "-1px",
                 transition: "color 0.1s ease"
               }}

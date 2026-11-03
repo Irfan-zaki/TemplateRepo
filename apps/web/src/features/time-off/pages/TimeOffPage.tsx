@@ -1,52 +1,42 @@
 import React from "react";
 import { useTimeOff } from "../hooks/useTimeOff";
 import { TimeOffTable } from "../components/TimeOffTable";
+import { Button } from "../../../components/ui/Button";
+import { Alert } from "../../../components/ui/Alert";
 
 export const TimeOffPage: React.FC = () => {
   const { data, isLoading, error, refetch } = useTimeOff();
 
   return (
-    <div style={{ padding: "1.5rem" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.5rem" }}>
+    <div style={{ padding: "var(--space-6, 24px)" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "var(--space-6, 24px)" }}>
         <div>
-          <h2 style={{ margin: "0 0 0.5rem 0" }}>Time Off & Leave Requests</h2>
-          <p style={{ margin: 0, color: "#64748b" }}>
+          <h2 style={{ margin: "0 0 var(--space-2, 8px) 0", fontSize: "var(--text-xl, 22px)", fontWeight: 600, color: "var(--color-text-primary)" }}>
+            Time Off &amp; Leave Requests
+          </h2>
+          <p style={{ margin: 0, fontSize: "var(--text-sm, 13px)", color: "var(--color-text-secondary)" }}>
             Submit, review and track employee leave requests.
           </p>
         </div>
-        <button
+        <Button
+          variant="primary"
+          size="sm"
           onClick={refetch}
-          style={{
-            padding: "8px 16px",
-            backgroundColor: "#2563eb",
-            color: "#fff",
-            border: "none",
-            borderRadius: "6px",
-            cursor: "pointer"
-          }}
         >
           Refresh Data
-        </button>
+        </Button>
       </div>
 
       {isLoading && (
-        <div style={{ padding: "2rem", textAlign: "center", color: "#64748b" }}>
+        <div style={{ padding: "var(--space-8, 32px)", textAlign: "center", fontSize: "var(--text-base, 15px)", color: "var(--color-text-secondary)" }}>
           Loading leave requests from API...
         </div>
       )}
 
       {error && (
-        <div
-          style={{
-            padding: "1rem",
-            backgroundColor: "#fef2f2",
-            color: "#991b1b",
-            border: "1px solid #fecaca",
-            borderRadius: "6px"
-          }}
-        >
-          <strong>API Error:</strong> {error.message}
-        </div>
+        <Alert variant="danger" title="API Error">
+          {error.message}
+        </Alert>
       )}
 
       {!isLoading && !error && <TimeOffTable requests={data} />}

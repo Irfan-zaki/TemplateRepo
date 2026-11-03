@@ -40,10 +40,10 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onNavigateToDashboard })
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              borderRadius: "4px",
-              fontWeight: 800,
-              fontSize: "1.125rem",
-              fontFamily: "var(--font-mono)"
+              borderRadius: "var(--radius-badge, 4px)",
+              fontWeight: 700,
+              fontSize: "var(--text-lg, 18px)",
+              fontFamily: "var(--font-sans)"
             }}
           >
             P
@@ -52,10 +52,10 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onNavigateToDashboard })
             <h1
               style={{
                 margin: 0,
-                fontSize: "1.25rem",
-                fontWeight: 800,
+                fontSize: "var(--text-xl, 22px)",
+                fontWeight: 700,
                 letterSpacing: "-0.02em",
-                color: "var(--color-ink)"
+                color: "var(--color-text-primary)"
               }}
             >
               PeoplePay360
@@ -64,8 +64,8 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onNavigateToDashboard })
           <Badge variant="neutral">ENTERPRISE CORE</Badge>
         </div>
 
-        <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-          <span style={{ fontSize: "0.875rem", color: "var(--color-subtle)" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "var(--space-3, 12px)" }}>
+          <span style={{ fontSize: "var(--text-sm, 13px)", color: "var(--color-text-secondary)" }}>
             Existing organization?
           </span>
           <Button
@@ -97,14 +97,14 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onNavigateToDashboard })
 
         <div
           style={{
-            marginTop: "1.25rem",
+            marginTop: "var(--space-4, 16px)",
             textAlign: "center",
-            fontSize: "0.8125rem",
-            color: "var(--color-subtle)",
+            fontSize: "var(--text-sm, 13px)",
+            color: "var(--color-text-secondary)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            gap: "8px"
+            gap: "var(--space-2, 8px)"
           }}
         >
           <ShieldCheckIcon size={16} />
@@ -115,18 +115,18 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onNavigateToDashboard })
       {/* Minimal Footer */}
       <footer
         style={{
-          borderTop: "1px solid #E5E7EB",
-          backgroundColor: "var(--color-card)",
+          borderTop: "1px solid var(--color-border)",
+          backgroundColor: "var(--color-surface)",
           padding: "1rem 2rem",
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          fontSize: "0.75rem",
-          color: "var(--color-subtle)"
+          fontSize: "var(--text-xs, 12px)",
+          color: "var(--color-text-secondary)"
         }}
       >
         <div>&copy; 2026 PeoplePay360 Inc. All rights reserved.</div>
-        <div style={{ display: "flex", gap: "1rem" }}>
+        <div style={{ display: "flex", gap: "var(--space-4, 16px)" }}>
           <span>Privacy Policy</span>
           <span>Terms of Service</span>
           <span className="font-mono">V1.0.0-PROD</span>

@@ -10,9 +10,7 @@ import {
   LockIcon,
   EyeIcon,
   EyeOffIcon,
-  ArrowRightIcon,
-  CircleCheckIcon,
-  ShieldCheckIcon
+  ArrowRightIcon
 } from "../../../components/ui/icons";
 import { useSignup } from "../hooks/useSignup";
 import { SignupInput } from "../types";
@@ -47,7 +45,7 @@ export const SignupForm: React.FC<SignupFormProps> = ({ onSuccess }) => {
       <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
         <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
           <Badge variant="success">ACCOUNT CREATED</Badge>
-          <span style={{ fontSize: "0.75rem", color: "var(--color-subtle)", fontFamily: "var(--font-mono)" }}>
+          <span className="font-mono" style={{ fontSize: "var(--font-size-tech, 12px)", color: "var(--color-text-secondary)" }}>
             HTTP 201 CREATED
           </span>
         </div>
@@ -67,25 +65,25 @@ export const SignupForm: React.FC<SignupFormProps> = ({ onSuccess }) => {
             gap: "0.75rem"
           }}
         >
-          <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.875rem" }}>
-            <span style={{ color: "var(--color-subtle)" }}>Account Holder:</span>
-            <span style={{ fontWeight: 600 }}>{data.fullName}</span>
+          <div style={{ display: "flex", justifyContent: "space-between", fontSize: "var(--text-base, 15px)" }}>
+            <span style={{ color: "var(--color-text-secondary)", fontSize: "var(--text-sm, 13px)" }}>Account Holder:</span>
+            <span style={{ fontWeight: 600, color: "var(--color-text-primary)" }}>{data.fullName}</span>
           </div>
-          <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.875rem" }}>
-            <span style={{ color: "var(--color-subtle)" }}>Work Email:</span>
-            <span className="font-mono">{data.email}</span>
+          <div style={{ display: "flex", justifyContent: "space-between", fontSize: "var(--text-base, 15px)" }}>
+            <span style={{ color: "var(--color-text-secondary)", fontSize: "var(--text-sm, 13px)" }}>Work Email:</span>
+            <span style={{ color: "var(--color-text-primary)" }}>{data.email}</span>
           </div>
-          <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.875rem" }}>
-            <span style={{ color: "var(--color-subtle)" }}>Organization:</span>
-            <span style={{ fontWeight: 600 }}>{data.companyName}</span>
+          <div style={{ display: "flex", justifyContent: "space-between", fontSize: "var(--text-base, 15px)" }}>
+            <span style={{ color: "var(--color-text-secondary)", fontSize: "var(--text-sm, 13px)" }}>Organization:</span>
+            <span style={{ fontWeight: 600, color: "var(--color-text-primary)" }}>{data.companyName}</span>
           </div>
-          <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.875rem" }}>
-            <span style={{ color: "var(--color-subtle)" }}>Assigned Role:</span>
+          <div style={{ display: "flex", justifyContent: "space-between", fontSize: "var(--text-base, 15px)" }}>
+            <span style={{ color: "var(--color-text-secondary)", fontSize: "var(--text-sm, 13px)" }}>Assigned Role:</span>
             <Badge variant="neutral">{data.role.replace("_", " ")}</Badge>
           </div>
-          <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.875rem" }}>
-            <span style={{ color: "var(--color-subtle)" }}>User ID:</span>
-            <span className="font-mono" style={{ fontSize: "0.8125rem" }}>{data.userId}</span>
+          <div style={{ display: "flex", justifyContent: "space-between", fontSize: "var(--text-base, 15px)" }}>
+            <span style={{ color: "var(--color-text-secondary)", fontSize: "var(--text-sm, 13px)" }}>User ID:</span>
+            <span className="font-mono" style={{ fontSize: "var(--font-size-tech, 12px)", color: "var(--color-text-primary)" }}>{data.userId}</span>
           </div>
         </div>
 
@@ -124,16 +122,16 @@ export const SignupForm: React.FC<SignupFormProps> = ({ onSuccess }) => {
     <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
       {/* Top Banner / Heading Context */}
       <div>
-        <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "0.5rem" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2, 8px)", marginBottom: "var(--space-2, 8px)" }}>
           <Badge variant="neutral">ENTERPRISE ONBOARDING</Badge>
-          <span style={{ fontSize: "0.75rem", color: "var(--color-subtle)", fontFamily: "var(--font-mono)" }}>
+          <span className="font-mono" style={{ fontSize: "var(--font-size-tech, 12px)", color: "var(--color-text-secondary)" }}>
             STAGE 01 / REGISTRATION
           </span>
         </div>
-        <h2 style={{ margin: "0 0 0.35rem 0", fontSize: "1.375rem", fontWeight: 700, color: "var(--color-ink)" }}>
+        <h2 style={{ margin: "0 0 0.35rem 0", fontSize: "var(--text-xl, 22px)", fontWeight: 600, lineHeight: "var(--leading-tight, 1.25)", color: "var(--color-text-primary)" }}>
           Create your organization account
         </h2>
-        <p style={{ margin: 0, fontSize: "0.875rem", color: "var(--color-subtle)" }}>
+        <p style={{ margin: 0, fontSize: "var(--text-sm, 13px)", color: "var(--color-text-secondary)", lineHeight: "var(--leading-normal, 1.5)" }}>
           Provision automated payroll rules, attendance tracking, and compliant contract management.
         </p>
       </div>
@@ -146,7 +144,7 @@ export const SignupForm: React.FC<SignupFormProps> = ({ onSuccess }) => {
       )}
 
       {/* Row 1: Full Name & Work Email */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "var(--space-4, 16px)" }}>
         <Input
           label="Full Legal Name"
           required
@@ -169,7 +167,7 @@ export const SignupForm: React.FC<SignupFormProps> = ({ onSuccess }) => {
       </div>
 
       {/* Row 2: Organization Name & Primary Role */}
-      <div style={{ display: "grid", gridTemplateColumns: "1.2fr 0.8fr", gap: "1rem" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "1.2fr 0.8fr", gap: "var(--space-4, 16px)" }}>
         <Input
           label="Organization / Company Name"
           required
@@ -183,15 +181,18 @@ export const SignupForm: React.FC<SignupFormProps> = ({ onSuccess }) => {
         <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
           <label
             style={{
-              fontSize: "0.8125rem",
-              fontWeight: 600,
-              color: "var(--color-ink)",
+              fontSize: "var(--font-size-label, 14px)",
+              fontWeight: 500,
+              color: "var(--color-text-primary)",
               display: "flex",
-              justifyContent: "space-between"
+              alignItems: "center",
+              marginBottom: "var(--space-1)"
             }}
           >
-            <span>Primary Role</span>
-            <span style={{ fontSize: "0.75rem", color: "var(--color-danger)" }}>*required</span>
+            <span>
+              Primary Role
+              <span style={{ color: "#ef4444", marginLeft: "4px", fontWeight: 600 }} aria-hidden="true">*</span>
+            </span>
           </label>
           <select
             value={formData.role}
@@ -199,13 +200,13 @@ export const SignupForm: React.FC<SignupFormProps> = ({ onSuccess }) => {
             disabled={isLoading}
             style={{
               width: "100%",
-              padding: "9px 12px",
-              fontSize: "0.875rem",
+              padding: "10px 12px",
+              fontSize: "var(--font-size-input, 15px)",
               fontFamily: "var(--font-sans)",
               borderRadius: "var(--radius-input)",
               border: "var(--border-ink)",
               backgroundColor: "var(--color-card)",
-              color: "var(--color-ink)",
+              color: "var(--color-text-primary)",
               boxShadow: "inset 1px 1px 2px rgba(0, 0, 0, 0.05)",
               outline: "none",
               cursor: "pointer"
@@ -279,54 +280,6 @@ export const SignupForm: React.FC<SignupFormProps> = ({ onSuccess }) => {
         />
       </div>
 
-      {/* Password Requirements Checklist (Neo-minimalist) */}
-      <div
-        style={{
-          padding: "10px 14px",
-          backgroundColor: "var(--color-muted)",
-          border: "var(--border-ink)",
-          borderRadius: "var(--radius-card)",
-          display: "flex",
-          justifyContent: "space-between",
-          fontSize: "0.75rem",
-          color: "var(--color-subtle)"
-        }}
-      >
-        <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
-          <span
-            style={{
-              width: "12px",
-              height: "12px",
-              borderRadius: "2px",
-              border: "1px solid var(--color-ink)",
-              backgroundColor: formData.password.length >= 8 ? "var(--color-success)" : "transparent",
-              display: "inline-block"
-            }}
-          />
-          8+ Characters
-        </span>
-        <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
-          <span
-            style={{
-              width: "12px",
-              height: "12px",
-              borderRadius: "2px",
-              border: "1px solid var(--color-ink)",
-              backgroundColor:
-                formData.password && formData.password === formData.confirmPassword
-                  ? "var(--color-success)"
-                  : "transparent",
-              display: "inline-block"
-            }}
-          />
-          Passwords Match
-        </span>
-        <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
-          <ShieldCheckIcon size={14} />
-          Encrypted Storage
-        </span>
-      </div>
-
       {/* Terms Agreement Checkbox */}
       <div style={{ display: "flex", alignItems: "flex-start", gap: "10px", marginTop: "4px" }}>
         <input
@@ -347,9 +300,9 @@ export const SignupForm: React.FC<SignupFormProps> = ({ onSuccess }) => {
         <label
           htmlFor="agreeToTerms"
           style={{
-            fontSize: "0.8125rem",
-            color: "var(--color-ink)",
-            lineHeight: 1.4,
+            fontSize: "var(--text-sm, 13px)",
+            color: "var(--color-text-primary)",
+            lineHeight: "var(--leading-normal, 1.5)",
             cursor: "pointer"
           }}
         >
@@ -360,34 +313,17 @@ export const SignupForm: React.FC<SignupFormProps> = ({ onSuccess }) => {
       </div>
 
       {/* Form Submission Button */}
-      <div style={{ marginTop: "0.5rem" }}>
+      <div style={{ marginTop: "var(--space-2, 8px)" }}>
         <Button
           type="submit"
           variant="primary"
           size="md"
           isLoading={isLoading}
-          style={{ width: "100%", padding: "12px 18px", fontSize: "0.9375rem" }}
+          style={{ width: "100%", padding: "12px 18px", fontSize: "var(--font-size-button, 15px)" }}
         >
           <span>Complete Organization Registration</span>
           <ArrowRightIcon size={18} />
         </Button>
-      </div>
-
-      {/* Monospace Footer Stamp */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          fontSize: "0.75rem",
-          color: "var(--color-subtle)",
-          borderTop: "1px solid #e2e8f0",
-          paddingTop: "12px",
-          marginTop: "4px"
-        }}
-      >
-        <span className="font-mono">SECURITY: ISO-27001 AUDITED</span>
-        <span className="font-mono">PEOPLEPAY360 CORE ENGINE</span>
       </div>
     </form>
   );

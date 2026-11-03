@@ -20,9 +20,9 @@ export const Button: React.FC<ButtonProps> = ({
 
   const baseStyle: React.CSSProperties = {
     fontFamily: "var(--font-sans)",
-    fontWeight: 600,
-    fontSize: size === "sm" ? "0.8125rem" : "0.875rem",
-    padding: size === "sm" ? "6px 12px" : "10px 18px",
+    fontWeight: "var(--font-weight-button, 600)" as unknown as number,
+    fontSize: size === "sm" ? "var(--text-sm, 13px)" : "var(--font-size-button, 15px)",
+    padding: size === "sm" ? "6px var(--space-3, 12px)" : "10px var(--space-4, 16px)",
     borderRadius: "var(--radius-btn)",
     border: "var(--border-ink)",
     boxShadow: isDisabled ? "none" : "var(--shadow-hard)",
@@ -30,7 +30,7 @@ export const Button: React.FC<ButtonProps> = ({
     display: "inline-flex",
     alignItems: "center",
     justifyContent: "center",
-    gap: "8px",
+    gap: "var(--space-2, 8px)",
     transition: "var(--transition-press)",
     textDecoration: "none",
     opacity: isDisabled ? 0.6 : 1,
@@ -45,7 +45,7 @@ export const Button: React.FC<ButtonProps> = ({
     },
     secondary: {
       backgroundColor: "var(--color-card)",
-      color: "var(--color-ink)"
+      color: "var(--color-text-primary)"
     },
     danger: {
       backgroundColor: "var(--color-danger)",
@@ -53,7 +53,7 @@ export const Button: React.FC<ButtonProps> = ({
     },
     outline: {
       backgroundColor: "transparent",
-      color: "var(--color-ink)"
+      color: "var(--color-text-primary)"
     }
   };
 

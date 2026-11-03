@@ -1,5 +1,6 @@
 import React from "react";
 import { AttendanceRecord } from "../../../types/api";
+import { Badge } from "../../../components/ui/Badge";
 
 interface AttendanceTableProps {
   records: AttendanceRecord[];
@@ -8,68 +9,54 @@ interface AttendanceTableProps {
 export const AttendanceTable: React.FC<AttendanceTableProps> = ({ records }) => {
   if (records.length === 0) {
     return (
-      <div style={{ padding: "2rem", textAlign: "center", color: "#666" }}>
+      <div style={{ padding: "var(--space-8, 32px)", textAlign: "center", color: "var(--color-text-secondary)", fontSize: "var(--text-base, 15px)" }}>
         No attendance records found.
       </div>
     );
   }
 
-  const getStatusColor = (status: AttendanceRecord["status"]) => {
+  const getBadgeVariant = (status: AttendanceRecord["status"]) => {
     switch (status) {
       case "present":
-        return { bg: "#dcfce7", text: "#166534" };
+        return "success";
       case "late":
-        return { bg: "#fef9c3", text: "#854d0e" };
       case "half_day":
-        return { bg: "#ffedd5", text: "#9a3412" };
+        return "warning";
       case "absent":
-        return { bg: "#fee2e2", text: "#991b1b" };
+        return "danger";
       default:
-        return { bg: "#f1f5f9", text: "#475569" };
+        return "neutral";
     }
   };
 
   return (
     <div style={{ overflowX: "auto" }}>
-      <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
+      <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left", fontFamily: "var(--font-sans)" }}>
         <thead>
-          <tr style={{ borderBottom: "2px solid #e2e8f0", backgroundColor: "#f8fafc" }}>
-            <th style={{ padding: "12px" }}>ID</th>
-            <th style={{ padding: "12px" }}>Employee</th>
-            <th style={{ padding: "12px" }}>Date</th>
-            <th style={{ padding: "12px" }}>Check In</th>
-            <th style={{ padding: "12px" }}>Check Out</th>
-            <th style={{ padding: "12px" }}>Status</th>
+          <tr style={{ borderBottom: "2px solid var(--color-border)", backgroundColor: "var(--color-muted)" }}>
+            <th style={{ padding: "12px", fontSize: "var(--text-xs, 12px)", fontWeight: 600, letterSpacing: "0.05em", textTransform: "uppercase", color: "var(--color-text-primary)" }}>ID</th>
+            <th style={{ padding: "12px", fontSize: "var(--text-xs, 12px)", fontWeight: 600, letterSpacing: "0.05em", textTransform: "uppercase", color: "var(--color-text-primary)" }}>Employee</th>
+            <th style={{ padding: "12px", fontSize: "var(--text-xs, 12px)", fontWeight: 600, letterSpacing: "0.05em", textTransform: "uppercase", color: "var(--color-text-primary)" }}>Date</th>
+            <th style={{ padding: "12px", fontSize: "var(--text-xs, 12px)", fontWeight: 600, letterSpacing: "0.05em", textTransform: "uppercase", color: "var(--color-text-primary)" }}>Check In</th>
+            <th style={{ padding: "12px", fontSize: "var(--text-xs, 12px)", fontWeight: 600, letterSpacing: "0.05em", textTransform: "uppercase", color: "var(--color-text-primary)" }}>Check Out</th>
+            <th style={{ padding: "12px", fontSize: "var(--text-xs, 12px)", fontWeight: 600, letterSpacing: "0.05em", textTransform: "uppercase", color: "var(--color-text-primary)" }}>Status</th>
           </tr>
         </thead>
         <tbody>
-          {records.map((rec) => {
-            const colors = getStatusColor(rec.status);
-            return (
-              <tr key={rec.id} style={{ borderBottom: "1px solid #e2e8f0" }}>
-                <td style={{ padding: "12px", fontFamily: "monospace" }}>{rec.id}</td>
-                <td style={{ padding: "12px", fontWeight: "600" }}>{rec.employeeName}</td>
-                <td style={{ padding: "12px", color: "#64748b" }}>{rec.date}</td>
-                <td style={{ padding: "12px" }}>{rec.checkIn}</td>
-                <td style={{ padding: "12px" }}>{rec.checkOut ?? "—"}</td>
-                <td style={{ padding: "12px" }}>
-                  <span
-                    style={{
-                      display: "inline-block",
-                      padding: "4px 8px",
-                      borderRadius: "4px",
-                      fontSize: "0.85rem",
-                      textTransform: "capitalize",
-                      backgroundColor: colors.bg,
-                      color: colors.text
-                    }}
-                  >
-                    {rec.status.replace("_", " ")}
-                  </span>
-                </td>
-              </tr>
-            );
-          })}
+          {records.map((rec) => (
+            <tr key={rec.id} style={{ borderBottom: "1px solid var(--color-border)" }}>
+              <td className="font-mono" style={{ padding: "12px", fontSize: "var(--font-size-tech, 12px)", color: "var(--color-text-primary)" }}>{rec.id}</td>
+              <td style={{ padding: "12px", fontWeight: 600, fontSize: "var(--text-base, 15px)", color: "var(--color-text-primary)" }}>{rec.employeeName}</td>
+              <td style={{ padding: "12px", fontSize: "var(--text-sm, 13px)", color: "var(--color-text-secondary)" }}>{rec.date}</td>
+              <td className="font-mono" style={{ padding: "12px", fontSize: "var(--font-size-tech, 12px)", color: "var(--color-text-primary)" }}>{rec.checkIn}</td>
+              <td className="font-mono" style={{ padding: "12px", fontSize: "var(--font-size-tech, 12px)", color: "var(--color-text-primary)" }}>{rec.checkOut ?? "—"}</td>
+              <td style={{ padding: "12px" }}>
+                <Badge variant={getBadgeVariant(rec.status)}>
+                  {rec.status.replace("_", " ")}
+                </Badge>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>
