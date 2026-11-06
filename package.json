@@ -8,6 +8,7 @@
     "dev:real": "pnpm --filter web dev:real",
     "build": "pnpm --filter web build",
     "db:seed": "pnpm --filter api db:seed",
+    "test:api": "node apps/api/test-backend-e2e.mjs",
     "check:mock-leakage": "node scripts/check-mock-leakage.mjs"
   },
   "devDependencies": {

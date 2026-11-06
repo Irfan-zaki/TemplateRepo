@@ -1,14 +1,7 @@
-import { employeeHandlers } from "./employees.handlers";
-import { attendanceHandlers } from "./attendance.handlers";
-import { timeOffHandlers } from "./time-off.handlers";
-import { payrollHandlers } from "./payroll.handlers";
 import { authHandlers } from "./auth.handlers";
+import { recordsHandlers } from "./records.handlers";
 
 export const handlers = [
-  ...employeeHandlers,
-  ...attendanceHandlers,
-  ...timeOffHandlers,
-  ...payrollHandlers,
-  ...authHandlers
+  ...authHandlers,
+  ...recordsHandlers
 ];
-

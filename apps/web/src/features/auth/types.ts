@@ -2,7 +2,7 @@ export interface SignupInput {
   fullName: string;
   email: string;
   companyName: string;
-  role: "admin" | "hr_manager" | "payroll_officer" | "employee";
+  role: string;
   password: string;
   confirmPassword?: string;
   agreeToTerms: boolean;

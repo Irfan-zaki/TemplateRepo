@@ -9,7 +9,7 @@ PeoplePay360 is an HR & Payroll product. It must look crisp, authoritative, and 
 | Share | Role | What it looks like |
 | --- | --- | --- |
 | **70% neo-minimalism** | Foundation | Clean whites/off-whites, 16–24px gutters, monochromatic slate/zinc, semantic color used only for status |
-| **30% neo-brutalism** | Accents | Razor-sharp 1.5–2px ink borders, **hard offset shadows**, punchy bold headings, `:active` press translation |
+| **30% neo-brutalism** | Accents | Razor-sharp 1.5–2px ink borders, **hard offset shadows**, punchy bold headings, `:active` press translation |=
 
 **Not neomorphism.** Soft inner-glow elevation (`box-shadow` blur, dual light/dark insets on cards) is out of scope. Hard shadows (`2px 2px 0 #0f172a`) sit on a spacious white canvas.
 

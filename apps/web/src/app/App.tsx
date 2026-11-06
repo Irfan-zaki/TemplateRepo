@@ -1,18 +1,15 @@
 import React, { useState } from "react";
-import { EmployeesPage } from "../features/employees/pages/EmployeesPage";
-import { AttendancePage } from "../features/attendance/pages/AttendancePage";
-import { TimeOffPage } from "../features/time-off/pages/TimeOffPage";
-import { PayrollPage } from "../features/payroll/pages/PayrollPage";
 import { SignupPage } from "../features/auth/pages/SignupPage";
+import { RecordsPage } from "../features/records/pages/RecordsPage";
 import { Button } from "../components/ui/Button";
 import { Badge } from "../components/ui/Badge";
+import { APP_CONFIG } from "../config/app.config";
 
 type ViewMode = "signup" | "dashboard";
-type Tab = "employees" | "attendance" | "time-off" | "payroll";
 
 export const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<ViewMode>("signup");
-  const [activeTab, setActiveTab] = useState<Tab>("employees");
+  const [activeTab, setActiveTab] = useState<string>(APP_CONFIG.navigation[0]?.id ?? "records");
 
   const apiMode = import.meta.env.VITE_API_MODE ?? "real";
   const isMockMode = apiMode === "mock";
@@ -21,7 +18,7 @@ export const App: React.FC = () => {
   if (currentView === "signup") {
     return (
       <div>
-        {/* DESIGN.md Section 2: Mode Banner with NO emoji, strict semantic tokens & ink border */}
+        {/* Strict Mode Banner with NO emoji, strict semantic tokens & ink border */}
         {isMockMode ? (
           <div
             style={{
@@ -63,10 +60,10 @@ export const App: React.FC = () => {
     );
   }
 
-  // Dashboard ERP Console View
+  // Dashboard Console View
   return (
     <div style={{ minHeight: "100vh", backgroundColor: "var(--color-canvas)" }}>
-      {/* DESIGN.md Section 2: Strict Mode Banner with NO emoji */}
+      {/* Strict Mode Banner with NO emoji */}
       {isMockMode ? (
         <div
           style={{
@@ -130,11 +127,13 @@ export const App: React.FC = () => {
               fontFamily: "var(--font-sans)"
             }}
           >
-            P
+            {APP_CONFIG.logoText}
           </div>
-          <h1 style={{ margin: 0, fontSize: "var(--text-xl, 22px)", fontWeight: 700, color: "var(--color-text-primary)" }}>
-            PeoplePay360
-          </h1>
+          <div>
+            <h1 style={{ margin: 0, fontSize: "var(--text-xl, 22px)", fontWeight: 700, color: "var(--color-text-primary)" }}>
+              {APP_CONFIG.name}
+            </h1>
+          </div>
           <Badge variant={isMockMode ? "warning" : "success"}>
             {apiMode} mode
           </Badge>
@@ -154,7 +153,7 @@ export const App: React.FC = () => {
         </div>
       </header>
 
-      {/* Navigation Tabs (DESIGN.md Section 7: Primary active underline) */}
+      {/* Navigation Tabs (Primary active underline) */}
       <nav
         style={{
           display: "flex",
@@ -164,17 +163,12 @@ export const App: React.FC = () => {
           borderBottom: "var(--border-ink)"
         }}
       >
-        {[
-          { id: "employees", label: "Employees" },
-          { id: "attendance", label: "Attendance" },
-          { id: "time-off", label: "Time Off" },
-          { id: "payroll", label: "Payroll" }
-        ].map((tab) => {
+        {APP_CONFIG.navigation.map((tab) => {
           const isActive = activeTab === tab.id;
           return (
             <button
               key={tab.id}
-              onClick={() => setActiveTab(tab.id as Tab)}
+              onClick={() => setActiveTab(tab.id)}
               style={{
                 padding: "14px 4px",
                 border: "none",
@@ -195,7 +189,7 @@ export const App: React.FC = () => {
         })}
       </nav>
 
-      {/* Main Content Card (DESIGN.md Section 6: Hard shadow, ink frame) */}
+      {/* Main Content Card */}
       <main
         style={{
           maxWidth: "1200px",
@@ -206,10 +200,7 @@ export const App: React.FC = () => {
           boxShadow: "var(--shadow-hard-lg)"
         }}
       >
-        {activeTab === "employees" && <EmployeesPage />}
-        {activeTab === "attendance" && <AttendancePage />}
-        {activeTab === "time-off" && <TimeOffPage />}
-        {activeTab === "payroll" && <PayrollPage />}
+        {activeTab === "records" && <RecordsPage />}
       </main>
     </div>
   );

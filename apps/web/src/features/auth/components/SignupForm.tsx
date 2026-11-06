@@ -14,6 +14,7 @@ import {
 } from "../../../components/ui/icons";
 import { useSignup } from "../hooks/useSignup";
 import { SignupInput } from "../types";
+import { APP_CONFIG } from "../../../config/app.config";
 
 interface SignupFormProps {
   onSuccess?: () => void;
@@ -26,7 +27,7 @@ export const SignupForm: React.FC<SignupFormProps> = ({ onSuccess }) => {
     fullName: "",
     email: "",
     companyName: "",
-    role: "hr_manager",
+    role: APP_CONFIG.defaultRoles[0]?.value || "admin",
     password: "",
     confirmPassword: "",
     agreeToTerms: false
@@ -50,7 +51,7 @@ export const SignupForm: React.FC<SignupFormProps> = ({ onSuccess }) => {
           </span>
         </div>
 
-        <Alert variant="success" title="Welcome to PeoplePay360">
+        <Alert variant="success" title={`Welcome to ${APP_CONFIG.name}`}>
           Your organization and primary administrative credentials have been securely provisioned.
         </Alert>
 
@@ -196,7 +197,7 @@ export const SignupForm: React.FC<SignupFormProps> = ({ onSuccess }) => {
           </label>
           <select
             value={formData.role}
-            onChange={(e) => setFormData({ ...formData, role: e.target.value as SignupInput["role"] })}
+            onChange={(e) => setFormData({ ...formData, role: e.target.value })}
             disabled={isLoading}
             style={{
               width: "100%",
@@ -212,10 +213,11 @@ export const SignupForm: React.FC<SignupFormProps> = ({ onSuccess }) => {
               cursor: "pointer"
             }}
           >
-            <option value="hr_manager">HR Manager</option>
-            <option value="payroll_officer">Payroll Officer</option>
-            <option value="admin">System Administrator</option>
-            <option value="employee">Standard Employee</option>
+            {APP_CONFIG.defaultRoles.map((role) => (
+              <option key={role.value} value={role.value}>
+                {role.label}
+              </option>
+            ))}
           </select>
         </div>
       </div>
@@ -308,7 +310,7 @@ export const SignupForm: React.FC<SignupFormProps> = ({ onSuccess }) => {
         >
           I accept the{" "}
           <span style={{ fontWeight: 600, textDecoration: "underline" }}>Enterprise Master Agreement</span> and{" "}
-          <span style={{ fontWeight: 600, textDecoration: "underline" }}>Payroll Compliance Protocols</span>.
+          <span style={{ fontWeight: 600, textDecoration: "underline" }}>Security Compliance Protocols</span>.
         </label>
       </div>
 

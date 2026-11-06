@@ -1,9 +1,6 @@
 import Fastify from "fastify";
 import cors from "@fastify/cors";
-import { employeesSeedData } from "./db/seeds/employees.seed.js";
-import { attendanceSeedData } from "./db/seeds/attendance.seed.js";
-import { timeOffRequestsSeedData } from "./db/seeds/time-off.seed.js";
-import { salaryRulesSeedData, payrunsSeedData } from "./db/seeds/payroll.seed.js";
+import { starterRecordsSeedData } from "./db/seeds/starter.seed.js";
 
 const fastify = Fastify({ logger: true });
 
@@ -11,40 +8,48 @@ await fastify.register(cors, {
   origin: "*"
 });
 
-// Centralized real API endpoints
-fastify.get("/api/employees", async () => {
+// Health check endpoint
+fastify.get("/api/health", async () => {
   return {
-    success: true,
-    data: employeesSeedData
+    status: "ok",
+    timestamp: new Date().toISOString()
   };
 });
 
-fastify.get("/api/attendance", async () => {
+// Generic starter records endpoint (matches frontend Records starter feature)
+fastify.get("/api/records", async () => {
   return {
     success: true,
-    data: attendanceSeedData
+    data: starterRecordsSeedData
   };
 });
 
-fastify.get("/api/time-off/requests", async () => {
-  return {
-    success: true,
-    data: timeOffRequestsSeedData
-  };
-});
+// Authentication registration endpoint
+fastify.post("/api/auth/signup", async (request, reply) => {
+  const body = request.body as Record<string, string>;
 
-fastify.get("/api/salary-rules", async () => {
-  return {
-    success: true,
-    data: salaryRulesSeedData
-  };
-});
+  if (body?.email === "conflict@exists.com") {
+    return reply.status(409).send({
+      success: false,
+      message: `The work email '${body.email}' is already registered.`
+    });
+  }
 
-fastify.get("/api/payruns", async () => {
-  return {
-    success: true,
-    data: payrunsSeedData
+  const newRecord = {
+    userId: `usr-${Date.now().toString(36)}`,
+    fullName: body?.fullName || "User",
+    email: body?.email || "user@example.com",
+    companyName: body?.companyName || "Organization",
+    role: body?.role || "member",
+    createdAt: new Date().toISOString(),
+    token: `jwt_starter_${Math.random().toString(36).substring(2)}`
   };
+
+  return reply.status(201).send({
+    success: true,
+    data: newRecord,
+    message: "Account provisioned successfully."
+  });
 });
 
 const start = async () => {
@@ -59,4 +64,3 @@ const start = async () => {
 };
 
 start();
-

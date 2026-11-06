@@ -13,12 +13,8 @@
 
 | Feature | Mock endpoint | Owner | Real API | Status | Notes |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **Employees** | `GET /api/employees` | Mawiya | `GET /api/employees` | `MOCK ONLY` | Fixture: `employees.fixture.ts` |
-| **Attendance** | `GET /api/attendance` | Tashfeen | `GET /api/attendance` | `MOCK ONLY` | Fixture: `attendance.fixture.ts` |
-| **Leave requests** | `GET /api/time-off/requests` | Tashfeen | `GET /api/time-off/requests` | `MOCK ONLY` | Fixture: `time-off.fixture.ts` |
-| **Salary rules** | `GET /api/salary-rules` | Irfan | `GET /api/salary-rules` | `MOCK ONLY` | Fixture: `payroll.fixture.ts` |
-| **Payruns** | `GET /api/payruns` | Irfan | `GET /api/payruns` | `MOCK ONLY` | Fixture: `payroll.fixture.ts` |
-| **Auth / Signup** | `POST /api/auth/signup` | Arsh / Team | `POST /api/auth/signup` | `MOCK ONLY` | Fixture: `auth.fixture.ts` |
+| **Auth / Signup** | `POST /api/auth/signup` | Starter Team | `POST /api/auth/signup` | `REAL API IMPLEMENTED` | Fixture: `auth.fixture.ts` |
+| **Records Console** | `GET /api/records` | Starter Team | `GET /api/records` | `REAL API IMPLEMENTED` | Fixture: `records.fixture.ts` |
 
 ---
 

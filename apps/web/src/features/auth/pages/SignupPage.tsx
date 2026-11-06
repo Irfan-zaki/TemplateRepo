@@ -4,6 +4,7 @@ import { Badge } from "../../../components/ui/Badge";
 import { Button } from "../../../components/ui/Button";
 import { SignupForm } from "../components/SignupForm";
 import { ShieldCheckIcon } from "../../../components/ui/icons";
+import { APP_CONFIG } from "../../../config/app.config";
 
 interface SignupPageProps {
   onNavigateToDashboard?: () => void;
@@ -46,7 +47,7 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onNavigateToDashboard })
               fontFamily: "var(--font-sans)"
             }}
           >
-            P
+            {APP_CONFIG.logoText}
           </div>
           <div>
             <h1
@@ -58,22 +59,22 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onNavigateToDashboard })
                 color: "var(--color-text-primary)"
               }}
             >
-              PeoplePay360
+              {APP_CONFIG.name}
             </h1>
           </div>
-          <Badge variant="neutral">ENTERPRISE CORE</Badge>
+          <Badge variant="neutral">{APP_CONFIG.tagline.toUpperCase()}</Badge>
         </div>
 
         <div style={{ display: "flex", alignItems: "center", gap: "var(--space-3, 12px)" }}>
           <span style={{ fontSize: "var(--text-sm, 13px)", color: "var(--color-text-secondary)" }}>
-            Existing organization?
+            Existing workspace?
           </span>
           <Button
             variant="outline"
             size="sm"
             onClick={onNavigateToDashboard}
           >
-            Access ERP Console
+            Access Dashboard
           </Button>
         </div>
       </header>
@@ -108,7 +109,7 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onNavigateToDashboard })
           }}
         >
           <ShieldCheckIcon size={16} />
-          <span>End-to-end encrypted connection &bull; ISO-27001 Audited</span>
+          <span>End-to-end encrypted connection &bull; {APP_CONFIG.securityLabel}</span>
         </div>
       </main>
 
@@ -125,11 +126,11 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onNavigateToDashboard })
           color: "var(--color-text-secondary)"
         }}
       >
-        <div>&copy; 2026 PeoplePay360 Inc. All rights reserved.</div>
+        <div>&copy; {new Date().getFullYear()} {APP_CONFIG.name} Inc. All rights reserved.</div>
         <div style={{ display: "flex", gap: "var(--space-4, 16px)" }}>
           <span>Privacy Policy</span>
           <span>Terms of Service</span>
-          <span className="font-mono">V1.0.0-PROD</span>
+          <span className="font-mono">{APP_CONFIG.version.toUpperCase()}</span>
         </div>
       </footer>
     </div>
