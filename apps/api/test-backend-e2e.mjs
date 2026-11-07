@@ -1,138 +1,160 @@
-// End-to-end backend and API integration test suite
-import Fastify from "fastify";
-import cors from "@fastify/cors";
-import { starterRecordsSeedData } from "./dist/db/seeds/starter.seed.js";
+import { buildApp } from "./src/app.ts";
+import { migrate } from "./src/db/migrate.ts";
+import { closePool } from "./src/db/pool.ts";
+import { runDatabaseSeed } from "./src/db/seeds/index.ts";
+import { DEV_PASSWORD } from "./src/db/seeds/starter.seed.ts";
+
+function assert(condition, message, state) {
+  if (condition) {
+    console.log(`  PASS: ${message}`);
+    state.passed += 1;
+  } else {
+    console.error(`  FAIL: ${message}`);
+    state.failed += 1;
+  }
+}
 
 async function runTests() {
-  console.log("🚀 Starting Fastify API in-process verification...");
+  const state = { passed: 0, failed: 0 };
+  console.log("Preparing database and Fastify app...");
+  await migrate();
+  await runDatabaseSeed();
 
-  const fastify = Fastify({ logger: false });
-  await fastify.register(cors, { origin: "*" });
+  const app = await buildApp({ logger: false });
+  await app.ready();
 
-  fastify.get("/api/health", async () => {
-    return { status: "ok", timestamp: new Date().toISOString() };
+  console.log("\n1. GET /api/health");
+  const health = await app.inject({ method: "GET", url: "/api/health" });
+  const healthBody = health.json();
+  assert(health.statusCode === 200, "status is 200", state);
+  assert(healthBody.status === "ok", "body status is ok", state);
+
+  console.log("\n2. GET /api/records without a token");
+  const locked = await app.inject({ method: "GET", url: "/api/records" });
+  assert(locked.statusCode === 401, "status is 401", state);
+
+  console.log("\n3. POST /api/auth/login as admin");
+  const login = await app.inject({
+    method: "POST",
+    url: "/api/auth/login",
+    payload: { email: "admin@starter.dev", password: DEV_PASSWORD }
   });
+  const loginBody = login.json();
+  assert(login.statusCode === 200, "status is 200", state);
+  assert(typeof loginBody.data?.token === "string" && loginBody.data.token.length > 10, "token returned", state);
+  const adminToken = loginBody.data.token;
 
-  fastify.get("/api/records", async () => {
-    return { success: true, data: starterRecordsSeedData };
+  console.log("\n4. GET /api/auth/me");
+  const me = await app.inject({
+    method: "GET",
+    url: "/api/auth/me",
+    headers: { authorization: `Bearer ${adminToken}` }
   });
+  const meBody = me.json();
+  assert(me.statusCode === 200, "status is 200", state);
+  assert(meBody.data?.role === "admin", "role is admin", state);
 
-  fastify.post("/api/auth/signup", async (request, reply) => {
-    const body = request.body;
-    if (body?.email === "conflict@exists.com") {
-      return reply.status(409).send({
-        success: false,
-        message: `The work email '${body.email}' is already registered.`
-      });
-    }
-
-    const newRecord = {
-      userId: `usr-${Date.now().toString(36)}`,
-      fullName: body?.fullName || "User",
-      email: body?.email || "user@example.com",
-      companyName: body?.companyName || "Organization",
-      role: body?.role || "member",
-      createdAt: new Date().toISOString(),
-      token: `jwt_starter_${Math.random().toString(36).substring(2)}`
-    };
-
-    return reply.status(201).send({
-      success: true,
-      data: newRecord,
-      message: "Account provisioned successfully."
-    });
+  console.log("\n5. GET /api/records as admin");
+  const records = await app.inject({
+    method: "GET",
+    url: "/api/records",
+    headers: { authorization: `Bearer ${adminToken}` }
   });
+  const recordsBody = records.json();
+  assert(records.statusCode === 200, "status is 200", state);
+  assert(Array.isArray(recordsBody.data) && recordsBody.data.length >= 5, "seed records are present", state);
 
-  await fastify.ready();
-  console.log("✅ Fastify instance initialized.");
-
-  let passed = 0;
-  let failed = 0;
-
-  function assert(condition, message) {
-    if (condition) {
-      console.log(`  ✅ PASS: ${message}`);
-      passed++;
-    } else {
-      console.error(`  ❌ FAIL: ${message}`);
-      failed++;
-    }
-  }
-
-  // 1. Test Health Endpoint
-  console.log("\n🧪 1. Testing GET /api/health");
-  const resHealth = await fastify.inject({ method: "GET", url: "/api/health" });
-  assert(resHealth.statusCode === 200, "Status is 200 OK");
-  const bodyHealth = JSON.parse(resHealth.payload);
-  assert(bodyHealth.status === "ok", "Response status is 'ok'");
-  assert(typeof bodyHealth.timestamp === "string", "Timestamp is valid ISO string");
-
-  // 2. Test Records Endpoint
-  console.log("\n🧪 2. Testing GET /api/records");
-  const resRecords = await fastify.inject({ method: "GET", url: "/api/records" });
-  assert(resRecords.statusCode === 200, "Status is 200 OK");
-  const bodyRecords = JSON.parse(resRecords.payload);
-  assert(bodyRecords.success === true, "Response has success: true");
-  assert(Array.isArray(bodyRecords.data), "Response data is an array");
-  assert(bodyRecords.data.length > 0, `Returned ${bodyRecords.data.length} records`);
-  assert(bodyRecords.data[0].id && bodyRecords.data[0].title, "Record has expected schema (id, title, status)");
-
-  // 3. Test Successful Signup Flow
-  console.log("\n🧪 3. Testing POST /api/auth/signup (Valid Submission)");
+  const email = `e2e-${Date.now().toString(36)}@starter.dev`;
   const signupPayload = {
-    fullName: "Irfan Zaki",
-    email: "irfan.zaki@hackathon.dev",
-    companyName: "DevPulse Labs",
+    fullName: "E2E User",
+    email,
+    companyName: "HackCore",
     role: "manager",
     password: "Password123!",
     agreeToTerms: true
   };
-  const resSignup = await fastify.inject({
+
+  console.log("\n6. POST /api/auth/signup");
+  const signup = await app.inject({ method: "POST", url: "/api/auth/signup", payload: signupPayload });
+  const signupBody = signup.json();
+  assert(signup.statusCode === 201, "status is 201", state);
+  assert(signupBody.data?.email === email, "email matches", state);
+  assert(signupBody.data?.userId?.startsWith("usr-"), "user id prefix", state);
+  assert(typeof signupBody.data?.token === "string", "signup token returned", state);
+
+  console.log("\n7. POST /api/auth/signup duplicate email");
+  const conflict = await app.inject({ method: "POST", url: "/api/auth/signup", payload: signupPayload });
+  const conflictBody = conflict.json();
+  assert(conflict.statusCode === 409, "status is 409", state);
+  assert(conflictBody.message?.includes("already registered"), "conflict message", state);
+
+  console.log("\n8. POST /api/auth/login bad password");
+  const badLogin = await app.inject({
     method: "POST",
-    url: "/api/auth/signup",
-    payload: signupPayload
+    url: "/api/auth/login",
+    payload: { email: "admin@starter.dev", password: "not-the-password" }
   });
-  assert(resSignup.statusCode === 201, "Status is 201 Created");
-  const bodySignup = JSON.parse(resSignup.payload);
-  assert(bodySignup.success === true, "Signup response success is true");
-  assert(bodySignup.data.email === "irfan.zaki@hackathon.dev", "User email matches submitted value");
-  assert(bodySignup.data.companyName === "DevPulse Labs", "Company name matches submitted value");
-  assert(bodySignup.data.role === "manager", "Role matches submitted value");
-  assert(bodySignup.data.userId.startsWith("usr-"), "User ID has expected prefix");
-  assert(typeof bodySignup.data.token === "string" && bodySignup.data.token.length > 10, "JWT Auth token received");
+  assert(badLogin.statusCode === 401, "status is 401", state);
 
-  // 4. Test Email Conflict / 409 Error Handling
-  console.log("\n🧪 4. Testing POST /api/auth/signup (Email Conflict)");
-  const conflictPayload = {
-    fullName: "Duplicate User",
-    email: "conflict@exists.com",
-    companyName: "Acme Corp",
-    role: "member",
-    password: "Password123!",
-    agreeToTerms: true
-  };
-  const resConflict = await fastify.inject({
+  console.log("\n9. Member cannot create a record");
+  const memberLogin = await app.inject({
     method: "POST",
-    url: "/api/auth/signup",
-    payload: conflictPayload
+    url: "/api/auth/login",
+    payload: { email: "member@starter.dev", password: DEV_PASSWORD }
   });
-  assert(resConflict.statusCode === 409, "Status is 409 Conflict");
-  const bodyConflict = JSON.parse(resConflict.payload);
-  assert(bodyConflict.success === false, "Response success is false");
-  assert(bodyConflict.message.includes("already registered"), "Contains user-friendly error message for frontend");
+  const memberToken = memberLogin.json().data.token;
+  const forbidden = await app.inject({
+    method: "POST",
+    url: "/api/records",
+    headers: { authorization: `Bearer ${memberToken}` },
+    payload: { title: "Blocked", category: "Test", status: "pending", value: 1 }
+  });
+  assert(forbidden.statusCode === 403, "status is 403", state);
 
-  console.log(`\n===========================================`);
-  console.log(`Results: ${passed} passed, ${failed} failed`);
-  console.log(`===========================================`);
+  console.log("\n10. Admin create, read, and update a record");
+  const created = await app.inject({
+    method: "POST",
+    url: "/api/records",
+    headers: { authorization: `Bearer ${adminToken}` },
+    payload: { title: "E2E Record", category: "Test", status: "pending", value: 42 }
+  });
+  const createdBody = created.json();
+  assert(created.statusCode === 201, "create status is 201", state);
+  const recordId = createdBody.data?.id;
 
-  await fastify.close();
+  const fetched = await app.inject({
+    method: "GET",
+    url: `/api/records/${recordId}`,
+    headers: { authorization: `Bearer ${adminToken}` }
+  });
+  assert(fetched.statusCode === 200, "read status is 200", state);
+  assert(fetched.json().data?.title === "E2E Record", "title matches", state);
 
-  if (failed > 0) {
+  const patched = await app.inject({
+    method: "PATCH",
+    url: `/api/records/${recordId}`,
+    headers: { authorization: `Bearer ${adminToken}` },
+    payload: { title: "E2E Record Updated", status: "active" }
+  });
+  assert(patched.statusCode === 200, "update status is 200", state);
+  assert(patched.json().data?.title === "E2E Record Updated", "title updated", state);
+  assert(patched.json().data?.status === "active", "status updated", state);
+
+  console.log(`\nResults: ${state.passed} passed, ${state.failed} failed`);
+  await app.close();
+  await closePool();
+
+  if (state.failed > 0) {
     process.exit(1);
   }
 }
 
-runTests().catch((err) => {
-  console.error("Test execution failed:", err);
+runTests().catch(async (error) => {
+  console.error("Test execution failed:", error);
+  try {
+    await closePool();
+  } catch {
+    // Pool may already be closed.
+  }
   process.exit(1);
 });

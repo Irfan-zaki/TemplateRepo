@@ -9,63 +9,60 @@ export function useSignup() {
   const [error, setError] = useState<string | null>(null);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
 
-  const executeSignup = useCallback(async (payload: SignupInput) => {
+  const executeSignup = useCallback(async (payload: SignupInput): Promise<SignupResponse | null> => {
     setIsLoading(true);
     setError(null);
 
-    // Client-side validations
     if (!payload.fullName.trim()) {
       setError("Full name is required.");
       setIsLoading(false);
-      return false;
+      return null;
     }
 
     if (!payload.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email)) {
       setError("Please provide a valid work email address.");
       setIsLoading(false);
-      return false;
+      return null;
     }
 
     if (!payload.companyName.trim()) {
       setError("Company or organization name is required.");
       setIsLoading(false);
-      return false;
+      return null;
     }
 
     if (payload.password.length < 8) {
       setError("Password must be at least 8 characters long.");
       setIsLoading(false);
-      return false;
+      return null;
     }
 
     if (payload.password !== payload.confirmPassword) {
       setError("Passwords do not match.");
       setIsLoading(false);
-      return false;
+      return null;
     }
 
     if (!payload.agreeToTerms) {
-      setError("You must acknowledge the enterprise terms of service.");
+      setError("You must acknowledge the terms of service.");
       setIsLoading(false);
-      return false;
+      return null;
     }
 
     try {
       const response = await signup(payload);
       setData(response.data);
       setIsSuccess(true);
-      return true;
+      return response.data;
     } catch (err: unknown) {
       if (err instanceof ApiError) {
-        // Try extracting specific server message if provided
-        const errorData = err.data as { message?: string } | undefined;
-        setError(errorData?.message || err.message);
+        setError(err.message);
       } else if (err instanceof Error) {
         setError(err.message);
       } else {
         setError("An unexpected error occurred during account creation.");
       }
-      return false;
+      return null;
     } finally {
       setIsLoading(false);
     }
@@ -87,4 +84,3 @@ export function useSignup() {
     reset
   };
 }
-

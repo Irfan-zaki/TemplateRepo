@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import { useAuth } from "../../../app/AuthProvider";
 import { Button } from "../../../components/ui/Button";
 import { Input } from "../../../components/ui/Input";
+import { Select } from "../../../components/ui/Select";
 import { Alert } from "../../../components/ui/Alert";
 import { Badge } from "../../../components/ui/Badge";
 import {
@@ -21,6 +23,7 @@ interface SignupFormProps {
 }
 
 export const SignupForm: React.FC<SignupFormProps> = ({ onSuccess }) => {
+  const { establishSession } = useAuth();
   const { data, isLoading, error, isSuccess, executeSignup, reset } = useSignup();
 
   const [formData, setFormData] = useState<SignupInput>({
@@ -91,7 +94,10 @@ export const SignupForm: React.FC<SignupFormProps> = ({ onSuccess }) => {
         <div style={{ display: "flex", gap: "12px", marginTop: "0.5rem" }}>
           <Button
             variant="primary"
-            onClick={onSuccess}
+            onClick={() => {
+              if (data?.token) establishSession(data);
+              onSuccess?.();
+            }}
             style={{ width: "100%" }}
           >
             <span>Proceed to Dashboard</span>
@@ -105,7 +111,7 @@ export const SignupForm: React.FC<SignupFormProps> = ({ onSuccess }) => {
                 fullName: "",
                 email: "",
                 companyName: "",
-                role: "hr_manager",
+                role: APP_CONFIG.defaultRoles[0]?.value || "member",
                 password: "",
                 confirmPassword: "",
                 agreeToTerms: false
@@ -133,7 +139,7 @@ export const SignupForm: React.FC<SignupFormProps> = ({ onSuccess }) => {
           Create your organization account
         </h2>
         <p style={{ margin: 0, fontSize: "var(--text-sm, 13px)", color: "var(--color-text-secondary)", lineHeight: "var(--leading-normal, 1.5)" }}>
-          Provision automated payroll rules, attendance tracking, and compliant contract management.
+          Create an account and pick a role. Replace this copy with the hackathon brief.
         </p>
       </div>
 
@@ -179,47 +185,14 @@ export const SignupForm: React.FC<SignupFormProps> = ({ onSuccess }) => {
           disabled={isLoading}
         />
 
-        <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-          <label
-            style={{
-              fontSize: "var(--font-size-label, 14px)",
-              fontWeight: 500,
-              color: "var(--color-text-primary)",
-              display: "flex",
-              alignItems: "center",
-              marginBottom: "var(--space-1)"
-            }}
-          >
-            <span>
-              Primary Role
-              <span style={{ color: "#ef4444", marginLeft: "4px", fontWeight: 600 }} aria-hidden="true">*</span>
-            </span>
-          </label>
-          <select
-            value={formData.role}
-            onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-            disabled={isLoading}
-            style={{
-              width: "100%",
-              padding: "10px 12px",
-              fontSize: "var(--font-size-input, 15px)",
-              fontFamily: "var(--font-sans)",
-              borderRadius: "var(--radius-input)",
-              border: "var(--border-ink)",
-              backgroundColor: "var(--color-card)",
-              color: "var(--color-text-primary)",
-              boxShadow: "inset 1px 1px 2px rgba(0, 0, 0, 0.05)",
-              outline: "none",
-              cursor: "pointer"
-            }}
-          >
-            {APP_CONFIG.defaultRoles.map((role) => (
-              <option key={role.value} value={role.value}>
-                {role.label}
-              </option>
-            ))}
-          </select>
-        </div>
+        <Select
+          label="Primary Role"
+          required
+          value={formData.role}
+          onChange={(event) => setFormData({ ...formData, role: event.target.value })}
+          disabled={isLoading}
+          options={APP_CONFIG.defaultRoles}
+        />
       </div>
 
       {/* Row 3: Password & Confirm Password */}

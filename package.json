@@ -1,18 +1,24 @@
 {
-  "name": "peoplepay360-monorepo",
+  "name": "hackcore-monorepo",
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "pnpm --filter web dev",
+    "dev": "concurrently -n api,web -c blue,magenta \"pnpm run dev:api\" \"pnpm run dev:web\"",
+    "dev:api": "pnpm --filter api dev",
+    "dev:web": "pnpm --filter web dev",
     "dev:mock": "pnpm --filter web dev:mock",
-    "dev:real": "pnpm --filter web dev:real",
-    "build": "pnpm --filter web build",
+    "dev:real": "concurrently -n api,web -c blue,magenta \"pnpm run dev:api\" \"pnpm run dev:web\"",
+    "build": "pnpm --filter api build && pnpm --filter web build",
+    "db:migrate": "pnpm --filter api db:migrate",
     "db:seed": "pnpm --filter api db:seed",
-    "test:api": "node apps/api/test-backend-e2e.mjs",
+    "test:api": "pnpm --filter api test",
     "check:mock-leakage": "node scripts/check-mock-leakage.mjs"
   },
+  "pnpm": {
+    "onlyBuiltDependencies": ["esbuild", "msw"]
+  },
   "devDependencies": {
+    "concurrently": "^10.0.7",
     "typescript": "^5.4.5"
   }
 }
-

@@ -5,28 +5,11 @@ In **`apps/web`**, typography and colors are managed centrally through CSS custo
 ---
 
 ### 1. Color and Font Definitions (Main File)
-Primary location: **[`apps/web/src/styles/tokens.css`](file:///c:/Users/zakii/Documents/odoo%20practise/apps/web/src/styles/tokens.css)**
+Primary location: `apps/web/src/styles/tokens.css`. The contract is `apps/web/DESIGN.md`.
 
 #### **Colors**
-Lines 42–79 define the palette and semantic status colors:
-```css
-/* Brand & Layout Colors */
---color-primary: #704B68;          /* Primary brand & CTA buttons */
---color-primary-hover: #5d3d54;    /* Primary hover state */
---color-secondary: #017E84;        /* Secondary brand accent */
---color-tertiary: #E59866;         /* Warm gold accent */
 
---color-text-primary: #111827;     /* Main text color */
---color-text-secondary: #526071;   /* Slate/subtle text */
---color-background: #FAF8F5;       /* Page canvas background */
---color-surface: #FFFFFF;          /* Card & container background */
---color-border: #E5E7EB;           /* Borders */
-
-/* Semantic Status Tokens */
---color-success: #10b981;          /* Success fill */
---color-warning: #f59e0b;          /* Warning fill */
---color-danger: #D97706;           /* Danger/error fill */
-```
+Ink `#0f172a`, canvas `#f8fafc`, card `#ffffff`. Status fills: success `#10b981`, warning `#f59e0b`, danger `#f43f5e`. Do not introduce a second palette.
 
 #### **Fonts & Typography**
 Lines 7–37 define font families, font weights, and size scales:

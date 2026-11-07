@@ -1,3 +1,5 @@
+export const DEV_PASSWORD = "hackathon";
+
 export interface SeedUser {
   id: string;
   email: string;
@@ -26,6 +28,12 @@ export const starterUsersSeedData: SeedUser[] = [
     email: "manager@starter.dev",
     name: "Operations Lead",
     role: "manager"
+  },
+  {
+    id: "usr-member-01",
+    email: "member@starter.dev",
+    name: "Team Member",
+    role: "member"
   }
 ];
 
@@ -36,7 +44,7 @@ export const starterRecordsSeedData: SeedRecord[] = [
     category: "Infrastructure",
     status: "active",
     value: 45000,
-    updatedAt: "2026-11-04 02:30"
+    updatedAt: "2026-11-04T02:30:00.000Z"
   },
   {
     id: "REC-1002",
@@ -44,7 +52,7 @@ export const starterRecordsSeedData: SeedRecord[] = [
     category: "Backend Engine",
     status: "active",
     value: 28000,
-    updatedAt: "2026-11-04 02:15"
+    updatedAt: "2026-11-04T02:15:00.000Z"
   },
   {
     id: "REC-1003",
@@ -52,7 +60,7 @@ export const starterRecordsSeedData: SeedRecord[] = [
     category: "Database",
     status: "pending",
     value: 17500,
-    updatedAt: "2026-11-04 01:45"
+    updatedAt: "2026-11-04T01:45:00.000Z"
   },
   {
     id: "REC-1004",
@@ -60,7 +68,7 @@ export const starterRecordsSeedData: SeedRecord[] = [
     category: "Refactoring",
     status: "archived",
     value: 12000,
-    updatedAt: "2026-11-03 23:10"
+    updatedAt: "2026-11-03T23:10:00.000Z"
   },
   {
     id: "REC-1005",
@@ -68,7 +76,6 @@ export const starterRecordsSeedData: SeedRecord[] = [
     category: "Quality Assurance",
     status: "active",
     value: 21500,
-    updatedAt: "2026-11-03 22:00"
+    updatedAt: "2026-11-03T22:00:00.000Z"
   }
 ];
-

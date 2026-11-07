@@ -1,0 +1,35 @@
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: hackcore
+      POSTGRES_PASSWORD: hackcore
+      POSTGRES_DB: hackcore
+    ports:
+      - "5435:5432"
+    volumes:
+      - hackcore_pg:/var/lib/postgresql/data
+      - ./apps/api/db/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hackcore -d hackcore"]
+      interval: 3s
+      timeout: 5s
+      retries: 20
+
+  api:
+    profiles: ["demo"]
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    environment:
+      DATABASE_URL: postgres://hackcore:hackcore@postgres:5432/hackcore
+      JWT_SECRET: dev-only-change-me
+      PORT: 3000
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  hackcore_pg:

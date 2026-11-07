@@ -36,28 +36,24 @@
   --font-size-tech: 12px;
 
   /* ==========================================================================
-     2. GLOBAL COLOUR SYSTEM (Plum-based branding & Neutral foundations)
+     2. COLOUR SYSTEM — matches apps/web/DESIGN.md
      ========================================================================== */
 
-  --color-primary: #704B68;          /* Plum primary brand & CTA */
-  --color-primary-hover: #5d3d54;    /* Plum hover state */
-  --color-secondary: #017E84;        /* Secondary brand accent */
-  --color-tertiary: #E59866;         /* Warm gold accent */
+  --color-ink: #0f172a;
+  --color-canvas: #f8fafc;
+  --color-card: #ffffff;
+  --color-muted: #f1f5f9;
+  --color-subtle: #64748b;
 
-  --color-text-primary: #111827;     /* Dark navy primary text */
-  --color-text-secondary: #526071;   /* Slate secondary text */
-  --color-background: #FAF8F5;       /* Warm beige/off-white canvas */
-  --color-surface: #FFFFFF;          /* Pure white card/form surface */
-  --color-border: #E5E7EB;           /* Subtle neutral border */
+  --color-primary: var(--color-ink);
+  --color-primary-hover: #1e293b;
 
-  /* Backward Compatibility Aliases */
-  --color-ink: var(--color-text-primary);
-  --color-canvas: var(--color-background);
-  --color-card: var(--color-surface);
-  --color-subtle: var(--color-text-secondary);
-  --color-muted: #F3EFEA;
+  --color-text-primary: var(--color-ink);
+  --color-text-secondary: var(--color-subtle);
+  --color-background: var(--color-canvas);
+  --color-surface: var(--color-card);
+  --color-border: #cbd5e1;
 
-  /* Semantic Status Tokens (Preserved) */
   --color-success: #10b981;
   --color-success-surface: #dcfce7;
   --color-success-text: #14532d;
@@ -68,14 +64,14 @@
   --color-warning-text: #713f12;
   --color-warning-border: #fde047;
 
-  --color-danger: #D97706;           /* Yellow/Amber error accent */
-  --color-danger-surface: #FEF9C3;   /* Light yellow alert background */
-  --color-danger-text: #713F12;      /* Deep legible amber/brown text */
-  --color-danger-border: #FACC15;    /* Crisp yellow border */
+  --color-danger: #f43f5e;
+  --color-danger-surface: #fee2e2;
+  --color-danger-text: #7f1d1d;
+  --color-danger-border: #fca5a5;
 
-  --color-neutral-surface: #F3EFEA;
-  --color-neutral-text: #111827;
-  --color-neutral-border: #D1D5DB;
+  --color-neutral-surface: #f1f5f9;
+  --color-neutral-text: #0f172a;
+  --color-neutral-border: #cbd5e1;
 
   /* ==========================================================================
      3. SPACING SCALE (Standardised 4px, 8px, 12px, 16px, 24px, 32px, 48px)
@@ -161,4 +157,10 @@ textarea:focus,
 button:focus-visible {
   outline: 2px solid var(--color-primary);
   outline-offset: 1px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }

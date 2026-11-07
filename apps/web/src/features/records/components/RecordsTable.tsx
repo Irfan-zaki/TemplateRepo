@@ -2,12 +2,14 @@ import React from "react";
 import { RecordItem } from "../types";
 import { Table, ColumnDef } from "../../../components/ui/Table";
 import { Badge } from "../../../components/ui/Badge";
+import { Button } from "../../../components/ui/Button";
 
 interface RecordsTableProps {
   records: RecordItem[];
+  onEdit?: (record: RecordItem) => void;
 }
 
-export const RecordsTable: React.FC<RecordsTableProps> = ({ records }) => {
+export const RecordsTable: React.FC<RecordsTableProps> = ({ records, onEdit }) => {
   const getBadgeVariant = (status: RecordItem["status"]) => {
     switch (status) {
       case "active":
@@ -71,6 +73,20 @@ export const RecordsTable: React.FC<RecordsTableProps> = ({ records }) => {
       render: (item) => item.updatedAt
     }
   ];
+
+  if (onEdit) {
+    columns.push({
+      key: "actions",
+      header: "Actions",
+      align: "right",
+      width: "110px",
+      render: (item) => (
+        <Button type="button" variant="outline" size="sm" onClick={() => onEdit(item)}>
+          Edit
+        </Button>
+      )
+    });
+  }
 
   return (
     <Table<RecordItem>

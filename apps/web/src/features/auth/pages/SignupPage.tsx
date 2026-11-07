@@ -1,20 +1,17 @@
 import React from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Card } from "../../../components/ui/Card";
 import { Badge } from "../../../components/ui/Badge";
-import { Button } from "../../../components/ui/Button";
 import { SignupForm } from "../components/SignupForm";
 import { ShieldCheckIcon } from "../../../components/ui/icons";
 import { APP_CONFIG } from "../../../config/app.config";
 
-interface SignupPageProps {
-  onNavigateToDashboard?: () => void;
-}
-
-export const SignupPage: React.FC<SignupPageProps> = ({ onNavigateToDashboard }) => {
+export const SignupPage: React.FC = () => {
+  const navigate = useNavigate();
   return (
     <div
       style={{
-        minHeight: "100vh",
+        flex: 1,
         backgroundColor: "var(--color-canvas)",
         display: "flex",
         flexDirection: "column"
@@ -69,13 +66,9 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onNavigateToDashboard })
           <span style={{ fontSize: "var(--text-sm, 13px)", color: "var(--color-text-secondary)" }}>
             Existing workspace?
           </span>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={onNavigateToDashboard}
-          >
-            Access Dashboard
-          </Button>
+          <Link to="/login" style={{ color: "var(--color-text-primary)", fontWeight: 600, fontSize: "var(--text-sm, 13px)" }}>
+            Sign in
+          </Link>
         </div>
       </header>
 
@@ -93,7 +86,7 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onNavigateToDashboard })
         }}
       >
         <Card elevation="lg" style={{ border: "var(--border-ink-thick)" }}>
-          <SignupForm onSuccess={onNavigateToDashboard} />
+          <SignupForm onSuccess={() => navigate("/app/records")} />
         </Card>
 
         <div

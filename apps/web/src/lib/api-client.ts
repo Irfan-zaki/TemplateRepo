@@ -1,3 +1,17 @@
+const TOKEN_KEY = "hackcore.token";
+
+export function getStoredToken(): string | null {
+  return localStorage.getItem(TOKEN_KEY);
+}
+
+export function setStoredToken(token: string | null): void {
+  if (token) {
+    localStorage.setItem(TOKEN_KEY, token);
+  } else {
+    localStorage.removeItem(TOKEN_KEY);
+  }
+}
+
 export class ApiError extends Error {
   public status: number;
   public data?: unknown;
@@ -21,103 +35,54 @@ function formatUrl(endpoint: string): string {
   return `${cleanBase}${cleanEndpoint}`;
 }
 
+function authHeaders(): Record<string, string> {
+  const token = getStoredToken();
+  return token ? { Authorization: `Bearer ${token}` } : {};
+}
+
+async function request<T>(method: string, endpoint: string, body?: unknown, options?: RequestInit): Promise<T> {
+  const response = await fetch(formatUrl(endpoint), {
+    ...options,
+    method,
+    headers: {
+      "Content-Type": "application/json",
+      ...authHeaders(),
+      ...options?.headers
+    },
+    body: body !== undefined ? JSON.stringify(body) : undefined
+  });
+
+  if (!response.ok) {
+    let errorBody: unknown;
+    try {
+      errorBody = await response.json();
+    } catch {
+      errorBody = await response.text();
+    }
+    const serverMessage =
+      typeof errorBody === "object" && errorBody !== null && "message" in errorBody
+        ? String((errorBody as { message: unknown }).message)
+        : `${method} ${endpoint} failed with status ${response.status}`;
+    throw new ApiError(response.status, serverMessage, errorBody);
+  }
+
+  return response.json() as Promise<T>;
+}
+
 export const apiClient = {
-  async get<T>(endpoint: string, options?: RequestInit): Promise<T> {
-    const url = formatUrl(endpoint);
-    const response = await fetch(url, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        ...options?.headers
-      },
-      ...options
-    });
-
-    if (!response.ok) {
-      let errorBody: unknown;
-      try {
-        errorBody = await response.json();
-      } catch {
-        errorBody = await response.text();
-      }
-      throw new ApiError(response.status, `Request to ${endpoint} failed with status ${response.status}`, errorBody);
-    }
-
-    return response.json() as Promise<T>;
+  get<T>(endpoint: string, options?: RequestInit): Promise<T> {
+    return request<T>("GET", endpoint, undefined, options);
   },
-
-  async post<T>(endpoint: string, body?: unknown, options?: RequestInit): Promise<T> {
-    const url = formatUrl(endpoint);
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        ...options?.headers
-      },
-      body: body !== undefined ? JSON.stringify(body) : undefined,
-      ...options
-    });
-
-    if (!response.ok) {
-      let errorBody: unknown;
-      try {
-        errorBody = await response.json();
-      } catch {
-        errorBody = await response.text();
-      }
-      throw new ApiError(response.status, `POST request to ${endpoint} failed with status ${response.status}`, errorBody);
-    }
-
-    return response.json() as Promise<T>;
+  post<T>(endpoint: string, body?: unknown, options?: RequestInit): Promise<T> {
+    return request<T>("POST", endpoint, body, options);
   },
-
-  async put<T>(endpoint: string, body?: unknown, options?: RequestInit): Promise<T> {
-    const url = formatUrl(endpoint);
-    const response = await fetch(url, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        ...options?.headers
-      },
-      body: body !== undefined ? JSON.stringify(body) : undefined,
-      ...options
-    });
-
-    if (!response.ok) {
-      let errorBody: unknown;
-      try {
-        errorBody = await response.json();
-      } catch {
-        errorBody = await response.text();
-      }
-      throw new ApiError(response.status, `PUT request to ${endpoint} failed with status ${response.status}`, errorBody);
-    }
-
-    return response.json() as Promise<T>;
+  put<T>(endpoint: string, body?: unknown, options?: RequestInit): Promise<T> {
+    return request<T>("PUT", endpoint, body, options);
   },
-
-  async delete<T>(endpoint: string, options?: RequestInit): Promise<T> {
-    const url = formatUrl(endpoint);
-    const response = await fetch(url, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        ...options?.headers
-      },
-      ...options
-    });
-
-    if (!response.ok) {
-      let errorBody: unknown;
-      try {
-        errorBody = await response.json();
-      } catch {
-        errorBody = await response.text();
-      }
-      throw new ApiError(response.status, `DELETE request to ${endpoint} failed with status ${response.status}`, errorBody);
-    }
-
-    return response.json() as Promise<T>;
+  patch<T>(endpoint: string, body?: unknown, options?: RequestInit): Promise<T> {
+    return request<T>("PATCH", endpoint, body, options);
+  },
+  delete<T>(endpoint: string, options?: RequestInit): Promise<T> {
+    return request<T>("DELETE", endpoint, undefined, options);
   }
 };
-

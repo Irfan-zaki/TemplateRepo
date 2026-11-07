@@ -1,3 +1,12 @@
+export interface AuthUser {
+  userId: string;
+  email: string;
+  fullName: string;
+  companyName: string;
+  role: string;
+  createdAt: string;
+}
+
 export interface SignupInput {
   fullName: string;
   email: string;
@@ -8,13 +17,11 @@ export interface SignupInput {
   agreeToTerms: boolean;
 }
 
-export interface SignupResponse {
-  userId: string;
-  email: string;
-  fullName: string;
-  companyName: string;
-  role: string;
-  createdAt: string;
-  token?: string;
+export interface SignupResponse extends AuthUser {
+  token: string;
 }
 
+export interface LoginInput {
+  email: string;
+  password: string;
+}

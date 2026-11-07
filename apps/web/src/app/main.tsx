@@ -1,6 +1,8 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
 import { App } from "./App";
+import { AuthProvider } from "./AuthProvider";
 import "../styles/tokens.css";
 
 async function bootstrap() {
@@ -12,20 +14,20 @@ async function bootstrap() {
 
   if (import.meta.env.DEV && apiMode === "mock") {
     const { worker } = await import("../mocks/browser");
-
     await worker.start({
       onUnhandledRequest: "bypass"
     });
-
-    console.warn("⚠️ DEVELOPMENT MOCK MODE ENABLED");
   }
 
   createRoot(document.getElementById("root")!).render(
     <StrictMode>
-      <App />
+      <BrowserRouter>
+        <AuthProvider>
+          <App />
+        </AuthProvider>
+      </BrowserRouter>
     </StrictMode>
   );
 }
 
 bootstrap();
-

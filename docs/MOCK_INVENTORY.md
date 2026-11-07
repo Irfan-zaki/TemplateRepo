@@ -1,29 +1,27 @@
 # Mock Inventory & API Migration Tracker
 
-**Responsible Owner:** Arsh (Maintained in coordination with feature owners)
-
 ## Status Definitions
-- `MOCK ONLY`: Endpoint is currently served only by MSW mock handler in `apps/web/src/mocks/handlers/`.
-- `REAL API IMPLEMENTED`: Backend Fastify endpoint is implemented and connected to database, undergoing testing.
-- `REAL API VERIFIED`: Verified end-to-end against Fastify + PostgreSQL in `pnpm dev:real` mode with data persistence confirmed.
 
----
+- `MOCK ONLY`: Endpoint is currently served only by an MSW handler in `apps/web/src/mocks/handlers/`.
+- `REAL API IMPLEMENTED`: Fastify route exists and talks to PostgreSQL.
+- `REAL API VERIFIED`: Checked against Fastify + PostgreSQL, including a reload or the API test suite.
 
 ## Active Inventory
 
-| Feature | Mock endpoint | Owner | Real API | Status | Notes |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| **Auth / Signup** | `POST /api/auth/signup` | Starter Team | `POST /api/auth/signup` | `REAL API IMPLEMENTED` | Fixture: `auth.fixture.ts` |
-| **Records Console** | `GET /api/records` | Starter Team | `GET /api/records` | `REAL API IMPLEMENTED` | Fixture: `records.fixture.ts` |
+| Feature | Mock endpoint | Real API | Status | Notes |
+| :--- | :--- | :--- | :--- | :--- |
+| Auth / Signup | `POST /api/auth/signup` | `POST /api/auth/signup` | `REAL API VERIFIED` | Persists a user and returns a JWT |
+| Auth / Login | `POST /api/auth/login` | `POST /api/auth/login` | `REAL API VERIFIED` | Demo password is in `docs/SETUP.md` |
+| Auth / Session | `GET /api/auth/me` | `GET /api/auth/me` | `REAL API VERIFIED` | Requires `Authorization: Bearer` |
+| Records list | `GET /api/records` | `GET /api/records` | `REAL API VERIFIED` | Any signed-in role |
+| Record detail | `GET /api/records/:id` | `GET /api/records/:id` | `REAL API VERIFIED` | Used by the edit dialog |
+| Record create | `POST /api/records` | `POST /api/records` | `REAL API VERIFIED` | `admin` and `manager` only |
+| Record update | `PATCH /api/records/:id` | `PATCH /api/records/:id` | `REAL API VERIFIED` | `admin` and `manager` only |
 
----
+## When a real endpoint is done
 
-## Migration Checklist (When Real Endpoint is Completed)
-
-When a real endpoint is ready, the feature owner must:
-1. Test it using `pnpm dev:real`.
-2. Verify its request and response contracts match `apps/web/src/types/api.ts`.
-3. Confirm database changes persist across page reloads.
-4. Update this inventory status (`REAL API IMPLEMENTED` -> `REAL API VERIFIED`).
-5. Remove the mock handler if no longer required, or retain it purely for isolated UI development and automated tests.
-
+1. Exercise it with `pnpm dev`.
+2. Confirm the JSON matches the feature `types.ts` file.
+3. Refresh the browser and confirm the row is still there.
+4. Update this table.
+5. Keep the MSW handler so `pnpm dev:mock` still works.

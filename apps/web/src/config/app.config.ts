@@ -3,11 +3,6 @@ export interface AppRoleOption {
   label: string;
 }
 
-export interface AppNavOption {
-  id: string;
-  label: string;
-}
-
 export interface AppConfig {
   name: string;
   tagline: string;
@@ -15,7 +10,6 @@ export interface AppConfig {
   version: string;
   securityLabel: string;
   defaultRoles: AppRoleOption[];
-  navigation: AppNavOption[];
 }
 
 export const APP_CONFIG: AppConfig = {
@@ -28,9 +22,6 @@ export const APP_CONFIG: AppConfig = {
     { value: "admin", label: "System Administrator" },
     { value: "manager", label: "Team Manager" },
     { value: "member", label: "Team Member" }
-  ],
-  navigation: [
-    { id: "records", label: "Records Console" }
   ]
 };
 

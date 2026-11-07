@@ -1,10 +1,10 @@
-# PeoplePay360 UI Design System
+# HackCore UI Design System
 
 Single source of truth for `apps/web` visual language. **This document is the contract.** Implement CSS tokens and shared components only after this file is agreed; do not invent one-off styles in feature pages.
 
 ## 1. Philosophy — 30% neo-brutalism + 70% neo-minimalism
 
-PeoplePay360 is an HR & Payroll product. It must look crisp, authoritative, and fast (Linear / Gumroad / Raycast), not like a meme and not like a washed-out generic SaaS admin.
+HackCore is the hackathon shell. It must look crisp, authoritative, and fast (Linear / Gumroad / Raycast), not like a meme and not like a washed-out generic SaaS admin.
 
 | Share | Role | What it looks like |
 | --- | --- | --- |

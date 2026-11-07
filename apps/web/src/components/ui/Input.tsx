@@ -29,7 +29,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             <span>
               {label}
               {props.required && (
-                <span style={{ color: "#ef4444", marginLeft: "4px", fontWeight: 600 }} aria-hidden="true">*</span>
+                <span style={{ color: "var(--color-danger)", marginLeft: "4px", fontWeight: 600 }} aria-hidden="true">*</span>
               )}
             </span>
           </label>

@@ -1,40 +1,64 @@
 import { http, HttpResponse } from "msw";
-import { SignupInput, SignupResponse } from "../../features/auth/types";
+import { SignupInput } from "../../features/auth/types";
+import { issueToken, publicUser, usersByEmail, userFromRequest } from "../session-store";
 
 export const authHandlers = [
   http.post("/api/auth/signup", async ({ request }) => {
     const body = (await request.json()) as SignupInput;
+    const email = body.email.toLowerCase();
 
-    // Simulate backend conflict validation
-    if (body.email === "conflict@exists.com" || body.email === "admin@peoplepay360.com") {
+    if (usersByEmail.has(email)) {
       return HttpResponse.json(
         {
           success: false,
-          message: `The work email '${body.email}' is already registered.`
+          message: `The work email '${email}' is already registered.`
         },
         { status: 409 }
       );
     }
 
-    // Simulate valid registration
-    const newRecord: SignupResponse = {
+    const user = {
       userId: `usr-${Date.now().toString(36)}`,
       fullName: body.fullName,
-      email: body.email,
+      email,
       companyName: body.companyName,
       role: body.role,
       createdAt: new Date().toISOString(),
-      token: `jwt_pp360_${Math.random().toString(36).substring(2)}`
+      password: body.password
     };
+    usersByEmail.set(email, user);
 
     return HttpResponse.json(
       {
         success: true,
-        data: newRecord,
-        message: "Organization account created successfully."
+        data: { ...publicUser(user), token: issueToken(email) },
+        message: "Account provisioned successfully."
       },
       { status: 201 }
     );
+  }),
+
+  http.post("/api/auth/login", async ({ request }) => {
+    const body = (await request.json()) as { email?: string; password?: string };
+    const email = (body.email ?? "").toLowerCase();
+    const user = usersByEmail.get(email);
+
+    if (!user || user.password !== body.password) {
+      return HttpResponse.json({ success: false, message: "Email or password is incorrect." }, { status: 401 });
+    }
+
+    return HttpResponse.json({
+      success: true,
+      data: { ...publicUser(user), token: issueToken(email) },
+      message: "Signed in."
+    });
+  }),
+
+  http.get("/api/auth/me", ({ request }) => {
+    const user = userFromRequest(request);
+    if (!user) {
+      return HttpResponse.json({ success: false, message: "Authentication required." }, { status: 401 });
+    }
+    return HttpResponse.json({ success: true, data: publicUser(user) });
   })
 ];
-
