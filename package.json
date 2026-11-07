@@ -9,6 +9,7 @@
     "dev:mock": "pnpm --filter web dev:mock",
     "dev:real": "concurrently -n api,web -c blue,magenta \"pnpm run dev:api\" \"pnpm run dev:web\"",
     "build": "pnpm --filter api build && pnpm --filter web build",
+    "db:generate": "pnpm --filter api db:generate",
     "db:migrate": "pnpm --filter api db:migrate",
     "db:seed": "pnpm --filter api db:seed",
     "test:api": "pnpm --filter api test",

@@ -1,9 +1,13 @@
 import type { FastifyReply, FastifyRequest } from "fastify";
 import jwt from "@fastify/jwt";
 import type { FastifyInstance } from "fastify";
+import { USER_ROLES, type UserRole } from "../db/schema/users.js";
 
-export const ROLES = ["admin", "manager", "member"] as const;
-export type Role = (typeof ROLES)[number];
+// Fastify "plugin": shared server machinery every feature uses.
+// Signup, login, and password rules live in features/auth, not here.
+
+export const ROLES = USER_ROLES;
+export type Role = UserRole;
 
 export async function registerAuth(app: FastifyInstance): Promise<void> {
   const secret = process.env.JWT_SECRET;

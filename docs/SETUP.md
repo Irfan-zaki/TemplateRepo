@@ -46,15 +46,20 @@ pnpm db:migrate && pnpm db:seed
 
 ## During the hackathon
 
-1. Add `apps/api/db/migrations/002_<brief>.sql` and run `pnpm db:migrate`.
-2. Add `apps/api/src/routes/<feature>.ts` with Zod and `requireRole(...)`. Register it in [apps/api/src/app.ts](../apps/api/src/app.ts).
-3. Each person adds one object to [apps/web/src/app/feature-registry.tsx](../apps/web/src/app/feature-registry.tsx) and a folder under `apps/web/src/features/<feature>/`.
-4. If the UI is ahead of the API, add a handler in `apps/web/src/mocks/handlers/` and list it in [docs/MOCK_INVENTORY.md](MOCK_INVENTORY.md).
-5. Demo with `pnpm dev` so a refresh still shows the data.
+1. Add the table in `apps/api/src/db/schema/<feature>.ts` and export it from `apps/api/src/db/schema/index.ts`.
+2. Run `pnpm db:generate` then `pnpm db:migrate`.
+3. Add a folder `apps/api/src/features/<feature>/` with three files:
+   - `schema.ts` — Zod checks for the request body
+   - `service.ts` — the business rules and Drizzle queries
+   - `routes.ts` — the HTTP paths, `requireAuth` / `requireRole`, and the JSON response
+4. Register the route function in [apps/api/src/app.ts](../apps/api/src/app.ts). Copy `features/records`.
+5. Each person adds one object to [apps/web/src/app/feature-registry.tsx](../apps/web/src/app/feature-registry.tsx) and a folder under `apps/web/src/features/<feature>/`.
+6. If the UI is ahead of the API, add a handler in `apps/web/src/mocks/handlers/` and list it in [docs/MOCK_INVENTORY.md](MOCK_INVENTORY.md).
+7. Demo with `pnpm dev` so a refresh still shows the data.
 
-Roles on the template are `admin`, `manager`, and `member`. A quotation brief can add `senior_manager`, `sales_rep`, or `customer` by widening the `users_role_check` constraint in a new migration and passing those names to `requireRole`.
+`plugins/` is not where features go. A Fastify plugin is shared machinery (the JWT checker, the database connection). Signup and login are the auth feature.
 
-Copy the records feature for create and edit: `GET /api/records`, `GET /api/records/:id`, `POST /api/records`, `PATCH /api/records/:id`.
+Roles on the template are `admin`, `manager`, and `member`. A quotation brief can add `senior_manager`, `sales_rep`, or `customer` by updating `USER_ROLES` and the check on the users table, then generating a new migration.
 
 ## Judge demo image
 

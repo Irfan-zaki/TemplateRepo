@@ -12,5 +12,11 @@ export function parseOrReply<T>(schema: ZodType<T>, value: unknown, reply: Fasti
 }
 
 export function isUniqueViolation(error: unknown): boolean {
-  return typeof error === "object" && error !== null && "code" in error && (error as { code: string }).code === "23505";
+  if (typeof error === "object" && error !== null && "code" in error && (error as { code: string }).code === "23505") {
+    return true;
+  }
+  if (typeof error === "object" && error !== null && "cause" in error) {
+    return isUniqueViolation((error as { cause: unknown }).cause);
+  }
+  return false;
 }

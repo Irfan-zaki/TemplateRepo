@@ -6,7 +6,7 @@ RUN npm install
 
 COPY apps/api/tsconfig.json ./tsconfig.json
 COPY apps/api/src ./src
-COPY apps/api/db ./db
+COPY apps/api/drizzle ./drizzle
 COPY apps/api/docker-entrypoint.sh ./docker-entrypoint.sh
 
 RUN npm run build && chmod +x docker-entrypoint.sh

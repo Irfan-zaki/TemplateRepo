@@ -1,5 +1,8 @@
 import bcrypt from "bcryptjs";
-import { closePool, pool } from "../pool.js";
+import { db } from "../client.js";
+import { closePool } from "../pool.js";
+import { records } from "../schema/records.js";
+import { users } from "../schema/users.js";
 import { DEV_PASSWORD, starterRecordsSeedData, starterUsersSeedData } from "./starter.seed.js";
 
 export async function runDatabaseSeed(): Promise<void> {
@@ -7,21 +10,31 @@ export async function runDatabaseSeed(): Promise<void> {
   const passwordHash = await bcrypt.hash(DEV_PASSWORD, 10);
 
   for (const user of starterUsersSeedData) {
-    await pool.query(
-      `INSERT INTO users (id, email, password_hash, name, company_name, role)
-       VALUES ($1, $2, $3, $4, $5, $6)
-       ON CONFLICT (email) DO NOTHING`,
-      [user.id, user.email, passwordHash, user.name, "HackCore", user.role]
-    );
+    await db
+      .insert(users)
+      .values({
+        id: user.id,
+        email: user.email,
+        passwordHash,
+        name: user.name,
+        companyName: "HackCore",
+        role: user.role
+      })
+      .onConflictDoNothing({ target: users.email });
   }
 
   for (const record of starterRecordsSeedData) {
-    await pool.query(
-      `INSERT INTO records (id, title, category, status, value, updated_at)
-       VALUES ($1, $2, $3, $4, $5, $6)
-       ON CONFLICT (id) DO NOTHING`,
-      [record.id, record.title, record.category, record.status, record.value, new Date(record.updatedAt)]
-    );
+    await db
+      .insert(records)
+      .values({
+        id: record.id,
+        title: record.title,
+        category: record.category,
+        status: record.status,
+        value: record.value,
+        updatedAt: new Date(record.updatedAt)
+      })
+      .onConflictDoNothing({ target: records.id });
   }
 
   console.log(`[seed] users ready: ${starterUsersSeedData.length}`);
