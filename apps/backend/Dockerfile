@@ -1,13 +1,13 @@
 FROM node:22-alpine
 WORKDIR /app
 
-COPY apps/api/package.json ./package.json
+COPY apps/backend/package.json ./package.json
 RUN npm install
 
-COPY apps/api/tsconfig.json ./tsconfig.json
-COPY apps/api/src ./src
-COPY apps/api/drizzle ./drizzle
-COPY apps/api/docker-entrypoint.sh ./docker-entrypoint.sh
+COPY apps/backend/tsconfig.json ./tsconfig.json
+COPY apps/backend/src ./src
+COPY apps/backend/drizzle ./drizzle
+COPY apps/backend/docker-entrypoint.sh ./docker-entrypoint.sh
 
 RUN npm run build && chmod +x docker-entrypoint.sh
 

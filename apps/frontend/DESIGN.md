@@ -1,6 +1,6 @@
 # HackCore UI Design System
 
-Single source of truth for `apps/web` visual language. **This document is the contract.** Implement CSS tokens and shared components only after this file is agreed; do not invent one-off styles in feature pages.
+Single source of truth for `apps/frontend` visual language. **This document is the contract.** Implement CSS tokens and shared components only after this file is agreed; do not invent one-off styles in feature pages.
 
 ## 1. Philosophy — 30% neo-brutalism + 70% neo-minimalism
 
@@ -197,7 +197,7 @@ Radix UI is **not** an icon pack. Heroicons is **not** the primitive library. Do
 
 ## 9. Hard bans: gradients, emoji, off-palette status
 
-Agents and humans **must not** ship these in `apps/web`.
+Agents and humans **must not** ship these in `apps/frontend`.
 
 ### No gradients
 

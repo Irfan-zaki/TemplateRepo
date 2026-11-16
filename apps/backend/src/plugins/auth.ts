@@ -12,7 +12,7 @@ export type Role = UserRole;
 export async function registerAuth(app: FastifyInstance): Promise<void> {
   const secret = process.env.JWT_SECRET;
   if (!secret) {
-    throw new Error("JWT_SECRET is missing. Copy apps/api/.env.example to apps/api/.env");
+    throw new Error("JWT_SECRET is missing. Copy apps/backend/.env.example to apps/backend/.env");
   }
   await app.register(jwt, { secret });
 }

@@ -9,7 +9,7 @@ dotenv.config({ path: path.resolve(here, "../../.env") });
 const connectionString = process.env.DATABASE_URL;
 
 if (!connectionString) {
-  throw new Error("DATABASE_URL is missing. Copy apps/api/.env.example to apps/api/.env");
+  throw new Error("DATABASE_URL is missing. Copy apps/backend/.env.example to apps/backend/.env");
 }
 
 export const pool = new pg.Pool({ connectionString });

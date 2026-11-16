@@ -6,8 +6,8 @@
 2. **Never hardcode sample employees, attendance records, leave requests, salary rules or payroll records in feature pages.**
 3. **Never create local fallback data when an API request fails.**
 4. **Never use setTimeout to simulate successful API operations.**
-5. **Every frontend data request must go through the centralized API client (`apps/web/src/lib/api-client.ts`).**
-6. **Temporary API mocks must be created exclusively inside `apps/web/src/mocks/`.**
+5. **Every frontend data request must go through the centralized API client (`apps/frontend/src/lib/api-client.ts`).**
+6. **Temporary API mocks must be created exclusively inside `apps/frontend/src/mocks/`.**
 7. **Every mock endpoint must have a corresponding handler and fixture.**
 8. **Never create a second mock implementation for an endpoint that already has a handler.**
 9. **Use shared TypeScript/Zod API contracts for both real and mocked responses.**

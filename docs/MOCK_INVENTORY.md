@@ -2,7 +2,7 @@
 
 ## Status Definitions
 
-- `MOCK ONLY`: Endpoint is currently served only by an MSW handler in `apps/web/src/mocks/handlers/`.
+- `MOCK ONLY`: Endpoint is currently served only by an MSW handler in `apps/frontend/src/mocks/handlers/`.
 - `REAL API IMPLEMENTED`: Fastify route exists and talks to PostgreSQL.
 - `REAL API VERIFIED`: Checked against Fastify + PostgreSQL, including a reload or the API test suite.
 

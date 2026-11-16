@@ -1,12 +1,12 @@
 ---
 description: PeoplePay360 UI — no gradients, no emoji, strict DESIGN.md colors
-globs: apps/web/**/*.{tsx,ts,css,html}
+globs: apps/frontend/**/*.{tsx,ts,css,html}
 alwaysApply: true
 ---
 
 # Web UI design (agent must follow)
 
-Source of truth: `apps/web/DESIGN.md`. Do not invent a second palette.
+Source of truth: `apps/frontend/DESIGN.md`. Do not invent a second palette.
 
 ## Forbidden
 

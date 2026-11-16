@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const targetDir = path.resolve(__dirname, "../apps/web/src");
+const targetDir = path.resolve(__dirname, "../apps/frontend/src");
 const patterns = [/mockData/i, /dummyData/i, /fakeData/i, /sampleData/i, /TODO-MOCK/i];
 
 let hasViolations = false;
@@ -43,7 +43,7 @@ function scanDir(dir) {
   }
 }
 
-console.log("🔍 Scanning apps/web/src for mock leakage (ignoring apps/web/src/mocks)...");
+console.log("🔍 Scanning apps/frontend/src for mock leakage (ignoring apps/frontend/src/mocks)...");
 scanDir(targetDir);
 
 if (hasViolations) {

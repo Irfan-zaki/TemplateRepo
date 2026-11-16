@@ -19,7 +19,7 @@ services:
     profiles: ["demo"]
     build:
       context: .
-      dockerfile: apps/api/Dockerfile
+      dockerfile: apps/backend/Dockerfile
     environment:
       DATABASE_URL: postgres://hackcore:hackcore@postgres:5432/hackcore
       JWT_SECRET: dev-only-change-me
