@@ -4,6 +4,8 @@ Needs Node 20+, pnpm 10+, and Docker.
 
 For auth/RBAC, tests, Drizzle Studio, team workflow, and mocks, read [HACKATHON_PLAYBOOK.md](HACKATHON_PLAYBOOK.md).
 
+**On the day of the event, follow [HACKATHON_PLAYBOOK.md section 0](HACKATHON_PLAYBOOK.md#0-hackathon-day-runbook-read-this-first).** In short: the lead imports this template into a new repo and pushes it. Teammates clone that new repo, not the template. Everyone wipes their local Docker database (`docker compose down -v`) and runs `pnpm db:migrate`. The team agrees tables and endpoints in `docs/CONTRACT.md`, the lead lands the schema on `main`, and then each person branches `feat/<feature>`.
+
 ```bash
 pnpm install
 docker compose up -d

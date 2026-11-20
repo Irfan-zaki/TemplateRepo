@@ -9,6 +9,217 @@ How to install is in [SETUP.md](SETUP.md). Folder map is in [about.md](about.md)
 
 ---
 
+## 0. Hackathon day runbook (read this first)
+
+The order of the day: **one person imports the template, everyone clones that one repo, everyone gets a clean local database, the team agrees the schema and API on paper, one person lands the foundation on `main`, then three people build in parallel.**
+
+Git background for the parallel part is in [TEAM-SYNC-GIT-GUIDE.md](TEAM-SYNC-GIT-GUIDE.md). The rules the AI skill follows are in `.cursor/skills/build-feature/TEAM-SYNC.md`.
+
+### 0.1 Before the event (one-time, each person)
+
+- [ ] Node 20+, pnpm 10+, Docker running. `pnpm install` works on your laptop.
+- [ ] Clone this template once and run the [hand-practice checklist](#hand-practice-checklist-do-this-once-before-the-event) at the bottom.
+- [ ] Cursor installed, with the `.cursor/skills/build-feature` skill present (it ships inside the repo).
+- [ ] Agree who the **lead** is. The lead owns the repo, the schema, and the foundation commit.
+- [ ] Check the hackathon rules about starter code (see the note in 0.2).
+
+### 0.2 Hour 0: the lead creates the project repo
+
+**Only the lead does this. Teammates do not clone the template.** If three people each clone the template, change `origin`, and push, you get three repos or three unrelated histories. Git then refuses to merge them (`refusing to merge unrelated histories`). One repo, three clones of it.
+
+1. On GitHub, create an **empty** repo for the event (no README, no `.gitignore`, no licence). Add both teammates as collaborators.
+2. Import the template into it:
+
+```bash
+git clone --depth 1 https://github.com/Irfan-zaki/TemplateRepo.git my-hackathon-app
+cd my-hackathon-app
+rm -rf .git                      # drop the template's history
+git init -b main
+git add .
+git commit -m "chore: import HackCore starter template"
+git remote add origin https://github.com/<you-or-org>/<new-repo>.git
+git push -u origin main
+```
+
+3. Tell teammates the new URL. They run `git clone <new-repo-url>` and nothing else.
+
+**Is the template visible to the organisers?** Assume yes. Changing `origin` alone keeps every old commit, with their old dates and author names, so anyone looking at the history sees work from before the event. A fresh `git init` removes that history, but the code is still a known starter, and `package.json`, the folder layout, and the docs still look like one. Do not rely on it being unnoticed.
+
+- Read the rules. If they say "all code must be written during the event," do not use the template.
+- If starter kits and boilerplate are allowed, say so at the demo: "we started from our own boilerplate for auth, the database setup, and the UI kit, and built the features during the event." The commit message above already says that.
+- Judges mostly care about the features you built in the 8 or 24 hours. Your commit history from that day shows that clearly.
+
+### 0.3 Hour 0: everyone gets a clean local database
+
+Everybody runs their own Postgres in Docker. The databases are **not** shared. What keeps them identical is the **migration files in git** (`apps/backend/drizzle/`), not Docker. If a table is missing on your machine, you did not run `pnpm db:migrate` after pulling.
+
+#### Why you saw old tables in Drizzle Studio
+
+One of these, almost always:
+
+| Cause | How to check |
+| :--- | :--- |
+| The **Docker volume survived**. Docker names it after the folder (`<folder>_hackcore_pg`). A new clone in a folder with the same name reuses the old data. | `docker volume ls` |
+| The **old container is still running** on port `5435`, so the new project connects to the old database. | `docker ps` |
+| `apps/backend/.env` points at a different database than the one you think. Drizzle Studio reads `DATABASE_URL` from there. | `cat apps/backend/.env` |
+
+#### Clean start (each person, in their own clone)
+
+```bash
+docker ps                          # anything old on 5435? stop it
+docker compose down -v             # stop this project and delete its volume (wipes data)
+docker compose up -d
+cp apps/backend/.env.example apps/backend/.env    # once. Never commit .env
+pnpm db:migrate
+pnpm db:seed
+pnpm db:studio                     # should show only this project's tables
+```
+
+If you cannot remove the old container, wipe the tables in place:
+
+```bash
+docker compose exec postgres psql -U hackcore -d hackcore -c "DROP SCHEMA public CASCADE; CREATE SCHEMA public; DROP SCHEMA IF EXISTS drizzle CASCADE;"
+pnpm db:migrate && pnpm db:seed
+```
+
+The `drizzle` schema holds the record of which migrations ran. If you drop only `public`, Drizzle thinks the tables still exist and skips creating them. Drop both.
+
+**Make the project's Docker names unique (lead, in the foundation commit).** At the top of `docker-compose.yml` add `name: <your-project>` (for example `name: dealflow`). The volume becomes `dealflow_hackcore_pg`, so it can never collide with an older project's volume. If teammates run other projects on port `5435`, change the left side of the port mapping and `DATABASE_URL` in `.env.example` together.
+
+### 0.4 Hour 0 to 0:45: kickoff, agree the contract on paper
+
+Do this together, before any feature code. Nobody builds until the contract is committed.
+
+1. Read the problem statement together. Pick **one happy path** and cut everything else.
+2. Put these files in the repo (the lead commits them straight to `main`):
+
+| File | Content |
+| :--- | :--- |
+| `docs/problem/statement.pdf` or `statement.md` | The brief, unchanged. |
+| `docs/problem/<name>.excalidraw` | The wireframe board. The skill can read it with `scripts/excalidraw-to-text.mjs`. |
+| `docs/CONTRACT.md` | The one agreed document, template below. |
+
+3. Fill `docs/CONTRACT.md`. This is the part that prevents integration pain later:
+
+```markdown
+# Contract (agreed <date>, changes need all three people)
+
+## Roles
+admin, manager, member, ... (and what each may do in one line)
+
+## Feature owners
+| Feature | Owner | Branch | Tables it owns |
+| :--- | :--- | :--- | :--- |
+| quotations | Dev B | feat/quotations | quotations, quotation_items |
+| approvals  | Dev C | feat/approvals  | approvals |
+| schema + auth + shared | Lead | (main) | users, roles, foundation |
+
+## Tables
+One block per table: columns, types, nullable, defaults, foreign keys, enums/status values.
+
+## Endpoints
+| Method | Path | Roles | Request body | Response | Owner |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| GET | /api/quotations | any | none | { items: Quotation[] } | Dev B |
+| POST | /api/quotations/:id/approve | manager | none | Quotation | Dev C |
+
+## Cross-feature dependencies
+"Approvals reads quotations.status and total." Producer merges first.
+
+## Order of merges
+Foundation, then producers, then consumers.
+```
+
+4. Keep it short and exact. Field names, status strings, and error shapes are where integration breaks. Each feature's own `docs/features/<feature>.md` Part A (created by the `build-feature` skill) will copy its slice from this file.
+
+### 0.5 Hour 0:45 to 1:30: the foundation commit (lead only)
+
+The foundation is everything three people would otherwise edit at the same time. One person does it once, and it reaches `main` **before** any feature branch starts.
+
+1. Create all the agreed tables in `apps/backend/src/db/schema/*.ts` and export them from `schema/index.ts`. Update `USER_ROLES` if the brief has new roles.
+2. Decide what to do with the sample `records` feature. Either keep it as a copy-paste reference until the end of the day, or delete it with its tests.
+3. **Regenerate the migration from scratch, once.** Nobody has data yet, so a clean history is safe:
+
+```bash
+rm -rf apps/backend/drizzle              # old 0000_init.sql + meta/
+pnpm db:generate                         # new 0000_*.sql for the agreed schema
+docker compose down -v && docker compose up -d
+pnpm db:migrate && pnpm db:seed
+pnpm db:studio                           # check the tables match CONTRACT.md
+```
+
+4. Rewrite the seed in `apps/backend/src/db/seeds/` so it tells the story of the brief (users per role, a few rows per table). Seed data is legitimate database data and stays.
+5. **Pre-wire the hot files** so nobody edits them in parallel. Add empty stubs for all three features in:
+   - `apps/backend/src/app.ts` (one `register` line each)
+   - `apps/frontend/src/app/feature-registry.tsx` (one object each)
+   - `apps/frontend/src/mocks/handlers/index.ts` (one spread each)
+
+   Each stub points at a file the owner will fill in. After this, owners edit only their own folder.
+6. Commit in small pieces and push to `main`:
+
+```bash
+git add docs/ && git commit -m "docs: problem statement, board, contract"
+git add apps/backend/src/db apps/backend/drizzle && git commit -m "feat(db): agreed schema, migration, seed"
+git add -A && git commit -m "chore: pre-wire feature stubs, unique docker name"
+git push origin main
+```
+
+7. Tell teammates: "Foundation is on main."
+
+### 0.6 Hour 1:30: teammates sync and fan out
+
+Each teammate, in their own clone:
+
+```bash
+git pull origin main
+docker compose down -v && docker compose up -d     # fresh DB
+pnpm install
+cp apps/backend/.env.example apps/backend/.env
+pnpm db:migrate && pnpm db:seed
+pnpm db:studio                                     # same tables as the lead
+git switch -c feat/<your-feature>
+```
+
+Check before moving on: all three people see **the same tables** in Drizzle Studio. If not, stop and fix it now.
+
+Then each person starts the `build-feature` skill in Cursor with their feature name. The skill reads `docs/CONTRACT.md`, the board, and the problem statement.
+
+### 0.7 During the build: the rules that matter
+
+Full detail is in `.cursor/skills/build-feature/TEAM-SYNC.md` and [TEAM-SYNC-GIT-GUIDE.md](TEAM-SYNC-GIT-GUIDE.md). In short:
+
+- **Schema changes go through the lead.** Never run `pnpm db:generate` on your own branch for a shared table. Two people generating migrations at once produce two files with the same number and a conflicting `_journal.json`. If you need a new column, message the lead. The lead adds it, generates the migration, pushes to `main`, and announces it. Everyone then runs `git pull --rebase origin main && pnpm db:migrate`.
+- **Never use `drizzle-kit push`** in the team flow. It changes your local database without writing a migration, so your database drifts away from everyone else's and nothing in git shows it.
+- **Rebase on `main` every 30 to 45 minutes** and after any announcement: `git pull --rebase origin main`.
+- **After every pull, run `pnpm db:migrate`.** A teammate's new table only exists on your machine after this.
+- **Merge small and early.** As soon as your feature's own tests pass in `pnpm dev:real`, merge. Producers before consumers.
+- **Contract changes are announced.** Edit `docs/CONTRACT.md`, push it to `main`, tell the team, and consumers update their mocks.
+- **Never commit `.env`. Never force-push `main`.**
+- **Depending on a teammate's unmerged feature:** build against the contract using an MSW mock, then swap to the real endpoint when it lands on `main`.
+
+If your local database gets confused at any point, wipe it and rebuild. It takes under a minute:
+
+```bash
+docker compose down -v && docker compose up -d && pnpm db:migrate && pnpm db:seed
+```
+
+### 0.8 Last hour: integration
+
+- Everyone is on `main`, rebased, with `pnpm db:migrate` run.
+- Run the full happy path in `pnpm dev:real` as each role. Hard refresh after each write.
+- `docs/MOCK_INVENTORY.md` has no `MOCK ONLY` rows left.
+- `pnpm test:backend` and `pnpm check:mock-leakage` pass.
+- Freeze features. Fix bugs only. Practise the demo.
+
+### 0.9 Message to paste to teammates (the night before)
+
+> Tomorrow: **I (lead) create the repo and push the starter. Do not clone the template. Clone my repo when I send the link.**
+> Tonight: install Node 20+, pnpm 10+, Docker, Cursor. Run `pnpm install` on any old clone to be sure it works.
+> Tomorrow, once we have the brief: 45 minutes together to agree tables, endpoints, and who owns which feature. I commit that as `docs/CONTRACT.md`. After the foundation is on `main`, you each `git pull`, wipe your Docker DB, migrate, and branch `feat/<your-feature>`.
+> Rules: only touch your own feature folders. Ask me before changing a shared table. Rebase on `main` often. Run `pnpm db:migrate` after every pull. Never commit `.env`.
+
+---
+
 ## 1. How auth and role-based access control (RBAC) work
 
 ### Plain-English story
