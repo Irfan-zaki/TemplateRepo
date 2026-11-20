@@ -103,7 +103,7 @@ export const RecordFormDialog: React.FC<RecordFormDialogProps> = ({ open, record
           </Alert>
         )}
         {isLoading ? (
-          <p style={{ margin: 0, color: "var(--color-text-secondary)" }}>Loading record...</p>
+          <p style={{ margin: 0, color: "var(--text-muted)" }}>Loading record...</p>
         ) : (
           <>
             <Input label="Title" required value={form.title} onChange={(event) => setForm({ ...form, title: event.target.value })} />

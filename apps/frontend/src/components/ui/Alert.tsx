@@ -16,31 +16,31 @@ export const Alert: React.FC<AlertProps> = ({
 }) => {
   const configs = {
     danger: {
-      surface: "var(--color-danger-surface)",
-      text: "var(--color-danger-text)",
-      border: "var(--color-danger-border)",
-      accentHex: "var(--color-danger)",
+      surface: "var(--danger-bg)",
+      text: "var(--danger-text)",
+      border: "var(--danger-line)",
+      accentHex: "var(--danger)",
       IconComponent: CircleAlertIcon
     },
     success: {
-      surface: "var(--color-success-surface)",
-      text: "var(--color-success-text)",
-      border: "var(--color-success-border)",
-      accentHex: "var(--color-success)",
+      surface: "var(--success-bg)",
+      text: "var(--success-text)",
+      border: "var(--success-line)",
+      accentHex: "var(--success)",
       IconComponent: CircleCheckIcon
     },
     warning: {
-      surface: "var(--color-warning-surface)",
-      text: "var(--color-warning-text)",
-      border: "var(--color-warning-border)",
-      accentHex: "var(--color-warning)",
+      surface: "var(--warning-bg)",
+      text: "var(--warning-text)",
+      border: "var(--warning-line)",
+      accentHex: "var(--warning)",
       IconComponent: TriangleAlertIcon
     },
     neutral: {
-      surface: "var(--color-neutral-surface)",
-      text: "var(--color-neutral-text)",
-      border: "var(--color-neutral-border)",
-      accentHex: "var(--color-ink)",
+      surface: "var(--neutral-bg)",
+      text: "var(--neutral-text)",
+      border: "var(--neutral-line)",
+      accentHex: "var(--text-muted)",
       IconComponent: CircleAlertIcon
     }
   };
@@ -58,7 +58,7 @@ export const Alert: React.FC<AlertProps> = ({
         borderRadius: "var(--radius-card)",
         backgroundColor: surface,
         color: text,
-        border: `1.5px solid ${border}`,
+        border: `1px solid ${border}`,
         fontSize: "0.875rem",
         lineHeight: 1.4
       }}

@@ -31,12 +31,12 @@ export const Select: React.FC<SelectProps> = ({
           style={{
             fontSize: "var(--font-size-label, 14px)",
             fontWeight: 500,
-            color: "var(--color-text-primary)"
+            color: "var(--text)"
           }}
         >
           {label}
           {props.required && (
-            <span style={{ color: "var(--color-danger)", marginLeft: "4px", fontWeight: 600 }} aria-hidden="true">
+            <span style={{ color: "var(--danger)", marginLeft: "4px", fontWeight: 600 }} aria-hidden="true">
               *
             </span>
           )}
@@ -46,15 +46,14 @@ export const Select: React.FC<SelectProps> = ({
         id={selectId}
         style={{
           width: "100%",
-          padding: "10px 12px",
+          height: "var(--control-height)",
+          padding: "0 12px",
           fontSize: "var(--font-size-input, 15px)",
           fontFamily: "var(--font-sans)",
           borderRadius: "var(--radius-input)",
-          border: error ? "1.5px solid var(--color-danger)" : "var(--border-ink)",
-          backgroundColor: "var(--color-card)",
-          color: "var(--color-text-primary)",
-          boxShadow: "inset 1px 1px 2px rgba(0, 0, 0, 0.05)",
-          outline: "none",
+          border: error ? "1px solid var(--danger)" : "var(--border-strong)",
+          backgroundColor: "var(--card)",
+          color: "var(--text)",
           cursor: "pointer",
           ...style
         }}
@@ -67,10 +66,10 @@ export const Select: React.FC<SelectProps> = ({
         ))}
       </select>
       {error && (
-        <div style={{ fontSize: "var(--text-sm, 13px)", fontWeight: 500, color: "var(--color-danger-text)" }}>{error}</div>
+        <div style={{ fontSize: "var(--text-sm, 13px)", fontWeight: 500, color: "var(--danger-text)" }}>{error}</div>
       )}
       {!error && helperText && (
-        <div style={{ fontSize: "var(--font-size-secondary, 13px)", color: "var(--color-text-secondary)" }}>{helperText}</div>
+        <div style={{ fontSize: "var(--font-size-secondary, 13px)", color: "var(--text-muted)" }}>{helperText}</div>
       )}
     </div>
   );

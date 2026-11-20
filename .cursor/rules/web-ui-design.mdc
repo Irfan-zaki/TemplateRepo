@@ -1,18 +1,24 @@
 ---
-description: PeoplePay360 UI — no gradients, no emoji, strict DESIGN.md colors
+description: HackCore UI (Odoo theme) — no gradients, no emoji, strict DESIGN.md colors, full-width layout
 globs: apps/frontend/**/*.{tsx,ts,css,html}
 alwaysApply: true
 ---
 
 # Web UI design (agent must follow)
 
-Source of truth: `apps/frontend/DESIGN.md`. Do not invent a second palette.
+Source of truth: `apps/frontend/DESIGN.md`. Tokens live in `apps/frontend/src/styles/tokens.css`. Do not invent a second palette.
+
+## Theme in one line
+
+Primary = beige / off-white (surfaces), Secondary = muted plum `#714b67` (buttons), Tertiary = teal `#017e84` (links, focus, info). Flat: 1px hairlines, no shadows.
 
 ## Forbidden
 
 - **Gradients:** no `linear-gradient`, `radial-gradient`, `conic-gradient`, `bg-gradient-*`, `from-` / `via-` / `to-` washes, mesh/shine overlays.
-- **Emoji in the DOM:** no ⚠️ ✨ 🚀 🎉 ✅ ❌ 🟢 🔴 or similar in banners, buttons, labels, empty states, or tables. Use Lucide or Badge text.
-- **Off-palette status:** do not use `#2563eb`, `#ef4444`, `#22c55e`, `#fef2f2`, `#991b1b`, Odoo purple, or any red/green not in DESIGN.md.
+- **Emoji in the DOM:** no ⚠️ ✨ 🚀 🎉 ✅ ❌ 🟢 🔴 or similar in banners, buttons, labels, empty states, or tables. Use icons or Badge text.
+- **Off-palette status:** do not use `#2563eb`, `#ef4444`, `#22c55e`, `#fef2f2`, `#991b1b`, or any red/green/blue not in DESIGN.md. Plum and teal are never status colours.
+- **Shadows and thick borders:** the theme is flat.
+- **Boxed pages:** do not wrap a page in a max-width bordered card. Lists and control panels run edge to edge; only forms and auth cards are width-limited.
 
 ## Status / error / success (use only these)
 
@@ -21,5 +27,6 @@ Source of truth: `apps/frontend/DESIGN.md`. Do not invent a second palette.
 | Success | `#10b981` | `#dcfce7` | `#14532d` | `#86efac` |
 | Warning | `#f59e0b` | `#fef9c3` | `#713f12` | `#fde047` |
 | Danger / error | `#f43f5e` | `#fee2e2` | `#7f1d1d` | `#fca5a5` |
+| Info (tertiary) | `#017e84` | `#dff1f1` | `#01666b` | `#8fcfd1` |
 
-Ink `#0f172a`, canvas `#f8fafc`, card `#ffffff`. Solid fills, 1.5px borders, hard offset shadows — no blur elevation.
+Canvas `#f4efe6`, surface `#fffdf8`, ink `#2b2430`. Reference colours by CSS variable, not by hex, in components.

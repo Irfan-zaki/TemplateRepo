@@ -34,7 +34,7 @@ export const RecordsTable: React.FC<RecordsTableProps> = ({ records, onEdit }) =
       key: "title",
       header: "Record Title",
       render: (item) => (
-        <span style={{ fontWeight: 600, color: "var(--color-text-primary)" }}>
+        <span style={{ fontWeight: 600, color: "var(--text)" }}>
           {item.title}
         </span>
       )
@@ -43,7 +43,7 @@ export const RecordsTable: React.FC<RecordsTableProps> = ({ records, onEdit }) =
       key: "category",
       header: "Category",
       render: (item) => (
-        <span style={{ color: "var(--color-text-secondary)", fontSize: "var(--text-sm, 13px)" }}>
+        <span style={{ color: "var(--text-muted)", fontSize: "var(--text-sm, 13px)" }}>
           {item.category}
         </span>
       )
@@ -81,7 +81,7 @@ export const RecordsTable: React.FC<RecordsTableProps> = ({ records, onEdit }) =
       align: "right",
       width: "110px",
       render: (item) => (
-        <Button type="button" variant="outline" size="sm" onClick={() => onEdit(item)}>
+        <Button type="button" variant="secondary" size="sm" onClick={() => onEdit(item)}>
           Edit
         </Button>
       )

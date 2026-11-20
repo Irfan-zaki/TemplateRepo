@@ -20,16 +20,15 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             style={{
               fontSize: "var(--font-size-label, 14px)",
               fontWeight: "var(--font-weight-label, 500)" as unknown as number,
-              color: "var(--color-text-primary)",
+              color: "var(--text)",
               display: "flex",
-              alignItems: "center",
-              marginBottom: "var(--space-1)"
+              alignItems: "center"
             }}
           >
             <span>
               {label}
               {props.required && (
-                <span style={{ color: "var(--color-danger)", marginLeft: "4px", fontWeight: 600 }} aria-hidden="true">*</span>
+                <span style={{ color: "var(--danger)", marginLeft: "4px", fontWeight: 600 }} aria-hidden="true">*</span>
               )}
             </span>
           </label>
@@ -50,7 +49,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
                 left: "12px",
                 display: "flex",
                 alignItems: "center",
-                color: "var(--color-subtle)",
+                color: "var(--text-muted)",
                 pointerEvents: "none"
               }}
             >
@@ -63,6 +62,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             ref={ref}
             style={{
               width: "100%",
+              height: "var(--control-height)",
               padding: startAdornment
                 ? "10px 12px 10px 38px"
                 : endAdornment
@@ -72,11 +72,9 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
               fontWeight: "var(--font-weight-input, 400)" as unknown as number,
               fontFamily: "var(--font-sans)",
               borderRadius: "var(--radius-input)",
-              border: error ? "1.5px solid var(--color-danger)" : "var(--border-ink)",
-              backgroundColor: "var(--color-card)",
-              color: "var(--color-text-primary)",
-              boxShadow: "inset 1px 1px 2px rgba(0, 0, 0, 0.05)",
-              outline: "none",
+              border: error ? "1px solid var(--danger)" : "var(--border-strong)",
+              backgroundColor: "var(--card)",
+              color: "var(--text)",
               transition: "border-color 0.15s ease",
               ...style
             }}
@@ -90,7 +88,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
                 right: "10px",
                 display: "flex",
                 alignItems: "center",
-                color: "var(--color-text-secondary)"
+                color: "var(--text-muted)"
               }}
             >
               {endAdornment}
@@ -103,7 +101,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             style={{
               fontSize: "var(--text-sm, 13px)",
               fontWeight: 500,
-              color: "var(--color-danger-text)",
+              color: "var(--danger-text)",
               display: "flex",
               alignItems: "center",
               gap: "4px"
@@ -117,7 +115,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           <div
             style={{
               fontSize: "var(--font-size-secondary, 13px)",
-              color: "var(--color-text-secondary)"
+              color: "var(--text-muted)"
             }}
           >
             {helperText}

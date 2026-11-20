@@ -22,9 +22,18 @@ interface SignupFormProps {
   onSuccess?: () => void;
 }
 
+const revealButtonStyle: React.CSSProperties = {
+  background: "none",
+  border: "none",
+  padding: "2px",
+  cursor: "pointer",
+  color: "var(--text-muted)",
+  display: "flex"
+};
+
 export const SignupForm: React.FC<SignupFormProps> = ({ onSuccess }) => {
   const { establishSession } = useAuth();
-  const { data, isLoading, error, isSuccess, executeSignup, reset } = useSignup();
+  const { data, isLoading, error, isSuccess, executeSignup } = useSignup();
 
   const [formData, setFormData] = useState<SignupInput>({
     fullName: "",
@@ -45,127 +54,87 @@ export const SignupForm: React.FC<SignupFormProps> = ({ onSuccess }) => {
   };
 
   if (isSuccess && data) {
-    return (
-      <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-          <Badge variant="success">ACCOUNT CREATED</Badge>
-          <span className="font-mono" style={{ fontSize: "var(--font-size-tech, 12px)", color: "var(--color-text-secondary)" }}>
-            HTTP 201 CREATED
-          </span>
-        </div>
+    const summary: { label: string; value: React.ReactNode }[] = [
+      { label: "Name", value: data.fullName },
+      { label: "Email", value: data.email },
+      { label: "Company", value: data.companyName },
+      { label: "Role", value: <Badge variant="neutral">{data.role.replace("_", " ")}</Badge> }
+    ];
 
-        <Alert variant="success" title={`Welcome to ${APP_CONFIG.name}`}>
-          Your organization and primary administrative credentials have been securely provisioned.
-        </Alert>
+    return (
+      <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
+        <div>
+          <h2 style={{ margin: "0 0 0.35rem", fontSize: "var(--text-xl, 22px)", fontWeight: 600 }}>Account created</h2>
+          <p style={{ margin: 0, fontSize: "var(--text-sm, 13px)", color: "var(--text-muted)" }}>
+            Welcome to {APP_CONFIG.name}. Your account is ready.
+          </p>
+        </div>
 
         <div
           style={{
-            border: "var(--border-ink)",
+            border: "var(--border-default)",
             borderRadius: "var(--radius-card)",
-            backgroundColor: "var(--color-muted)",
-            padding: "1.25rem",
+            backgroundColor: "var(--section)",
+            padding: "var(--space-4, 16px)",
             display: "flex",
             flexDirection: "column",
-            gap: "0.75rem"
+            gap: "var(--space-3, 12px)"
           }}
         >
-          <div style={{ display: "flex", justifyContent: "space-between", fontSize: "var(--text-base, 15px)" }}>
-            <span style={{ color: "var(--color-text-secondary)", fontSize: "var(--text-sm, 13px)" }}>Account Holder:</span>
-            <span style={{ fontWeight: 600, color: "var(--color-text-primary)" }}>{data.fullName}</span>
-          </div>
-          <div style={{ display: "flex", justifyContent: "space-between", fontSize: "var(--text-base, 15px)" }}>
-            <span style={{ color: "var(--color-text-secondary)", fontSize: "var(--text-sm, 13px)" }}>Work Email:</span>
-            <span style={{ color: "var(--color-text-primary)" }}>{data.email}</span>
-          </div>
-          <div style={{ display: "flex", justifyContent: "space-between", fontSize: "var(--text-base, 15px)" }}>
-            <span style={{ color: "var(--color-text-secondary)", fontSize: "var(--text-sm, 13px)" }}>Organization:</span>
-            <span style={{ fontWeight: 600, color: "var(--color-text-primary)" }}>{data.companyName}</span>
-          </div>
-          <div style={{ display: "flex", justifyContent: "space-between", fontSize: "var(--text-base, 15px)" }}>
-            <span style={{ color: "var(--color-text-secondary)", fontSize: "var(--text-sm, 13px)" }}>Assigned Role:</span>
-            <Badge variant="neutral">{data.role.replace("_", " ")}</Badge>
-          </div>
-          <div style={{ display: "flex", justifyContent: "space-between", fontSize: "var(--text-base, 15px)" }}>
-            <span style={{ color: "var(--color-text-secondary)", fontSize: "var(--text-sm, 13px)" }}>User ID:</span>
-            <span className="font-mono" style={{ fontSize: "var(--font-size-tech, 12px)", color: "var(--color-text-primary)" }}>{data.userId}</span>
-          </div>
+          {summary.map((row) => (
+            <div key={row.label} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "var(--space-4, 16px)" }}>
+              <span style={{ color: "var(--text-muted)", fontSize: "var(--text-sm, 13px)" }}>{row.label}</span>
+              <span style={{ fontWeight: 600, color: "var(--text)" }}>{row.value}</span>
+            </div>
+          ))}
         </div>
 
-        <div style={{ display: "flex", gap: "12px", marginTop: "0.5rem" }}>
-          <Button
-            variant="primary"
-            onClick={() => {
-              if (data?.token) establishSession(data);
-              onSuccess?.();
-            }}
-            style={{ width: "100%" }}
-          >
-            <span>Proceed to Dashboard</span>
-            <ArrowRightIcon size={16} />
-          </Button>
-          <Button
-            variant="outline"
-            onClick={() => {
-              reset();
-              setFormData({
-                fullName: "",
-                email: "",
-                companyName: "",
-                role: APP_CONFIG.defaultRoles[0]?.value || "member",
-                password: "",
-                confirmPassword: "",
-                agreeToTerms: false
-              });
-            }}
-          >
-            Register Another
-          </Button>
-        </div>
+        <Button
+          variant="primary"
+          onClick={() => {
+            if (data?.token) establishSession(data);
+            onSuccess?.();
+          }}
+          style={{ width: "100%" }}
+        >
+          <span>Continue</span>
+          <ArrowRightIcon size={16} />
+        </Button>
       </div>
     );
   }
 
   return (
     <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
-      {/* Top Banner / Heading Context */}
       <div>
-        <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2, 8px)", marginBottom: "var(--space-2, 8px)" }}>
-          <Badge variant="neutral">ENTERPRISE ONBOARDING</Badge>
-          <span className="font-mono" style={{ fontSize: "var(--font-size-tech, 12px)", color: "var(--color-text-secondary)" }}>
-            STAGE 01 / REGISTRATION
-          </span>
-        </div>
-        <h2 style={{ margin: "0 0 0.35rem 0", fontSize: "var(--text-xl, 22px)", fontWeight: 600, lineHeight: "var(--leading-tight, 1.25)", color: "var(--color-text-primary)" }}>
-          Create your organization account
-        </h2>
-        <p style={{ margin: 0, fontSize: "var(--text-sm, 13px)", color: "var(--color-text-secondary)", lineHeight: "var(--leading-normal, 1.5)" }}>
-          Create an account and pick a role. Replace this copy with the hackathon brief.
+        <h2 style={{ margin: "0 0 0.35rem", fontSize: "var(--text-xl, 22px)", fontWeight: 600 }}>Create your account</h2>
+        <p style={{ margin: 0, fontSize: "var(--text-sm, 13px)", color: "var(--text-muted)" }}>
+          Get started with {APP_CONFIG.name}.
         </p>
       </div>
 
-      {/* Semantic Error Alert */}
       {error && (
-        <Alert variant="danger" title="Registration Failed">
+        <Alert variant="danger" title="Could not create account">
           {error}
         </Alert>
       )}
 
-      {/* Row 1: Full Name & Work Email */}
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "var(--space-4, 16px)" }}>
         <Input
-          label="Full Legal Name"
+          label="Full name"
           required
-          placeholder="e.g. Sarah Connor"
+          autoComplete="name"
           startAdornment={<UserIcon size={16} />}
           value={formData.fullName}
           onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
           disabled={isLoading}
         />
         <Input
-          label="Work Email Address"
+          label="Work email"
           type="email"
           required
-          placeholder="sarah@company.com"
+          autoComplete="email"
+          placeholder="name@company.com"
           startAdornment={<MailIcon size={16} />}
           value={formData.email}
           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -173,20 +142,18 @@ export const SignupForm: React.FC<SignupFormProps> = ({ onSuccess }) => {
         />
       </div>
 
-      {/* Row 2: Organization Name & Primary Role */}
       <div style={{ display: "grid", gridTemplateColumns: "1.2fr 0.8fr", gap: "var(--space-4, 16px)" }}>
         <Input
-          label="Organization / Company Name"
+          label="Company"
           required
-          placeholder="e.g. Acme Technologies Inc."
+          autoComplete="organization"
           startAdornment={<BuildingIcon size={16} />}
           value={formData.companyName}
           onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
           disabled={isLoading}
         />
-
         <Select
-          label="Primary Role"
+          label="Role"
           required
           value={formData.role}
           onChange={(event) => setFormData({ ...formData, role: event.target.value })}
@@ -195,26 +162,18 @@ export const SignupForm: React.FC<SignupFormProps> = ({ onSuccess }) => {
         />
       </div>
 
-      {/* Row 3: Password & Confirm Password */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "var(--space-4, 16px)" }}>
         <Input
           label="Password"
           type={showPassword ? "text" : "password"}
           required
-          placeholder="Min. 8 characters"
+          autoComplete="new-password"
           startAdornment={<LockIcon size={16} />}
           endAdornment={
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              style={{
-                background: "none",
-                border: "none",
-                padding: "2px",
-                cursor: "pointer",
-                color: "var(--color-subtle)",
-                display: "flex"
-              }}
+              style={revealButtonStyle}
               title={showPassword ? "Hide password" : "Show password"}
             >
               {showPassword ? <EyeOffIcon size={16} /> : <EyeIcon size={16} />}
@@ -223,27 +182,19 @@ export const SignupForm: React.FC<SignupFormProps> = ({ onSuccess }) => {
           value={formData.password}
           onChange={(e) => setFormData({ ...formData, password: e.target.value })}
           disabled={isLoading}
-          helperText="Must be at least 8 characters long"
+          helperText="At least 8 characters"
         />
-
         <Input
-          label="Confirm Password"
+          label="Confirm password"
           type={showConfirmPassword ? "text" : "password"}
           required
-          placeholder="Re-enter password"
+          autoComplete="new-password"
           startAdornment={<LockIcon size={16} />}
           endAdornment={
             <button
               type="button"
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              style={{
-                background: "none",
-                border: "none",
-                padding: "2px",
-                cursor: "pointer",
-                color: "var(--color-subtle)",
-                display: "flex"
-              }}
+              style={revealButtonStyle}
               title={showConfirmPassword ? "Hide password" : "Show password"}
             >
               {showConfirmPassword ? <EyeOffIcon size={16} /> : <EyeIcon size={16} />}
@@ -255,52 +206,32 @@ export const SignupForm: React.FC<SignupFormProps> = ({ onSuccess }) => {
         />
       </div>
 
-      {/* Terms Agreement Checkbox */}
-      <div style={{ display: "flex", alignItems: "flex-start", gap: "10px", marginTop: "4px" }}>
+      <label
+        htmlFor="agreeToTerms"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "10px",
+          fontSize: "var(--text-sm, 13px)",
+          color: "var(--text)",
+          cursor: "pointer"
+        }}
+      >
         <input
           id="agreeToTerms"
           type="checkbox"
           checked={formData.agreeToTerms}
           onChange={(e) => setFormData({ ...formData, agreeToTerms: e.target.checked })}
           disabled={isLoading}
-          style={{
-            marginTop: "3px",
-            width: "16px",
-            height: "16px",
-            accentColor: "var(--color-primary)",
-            cursor: "pointer",
-            border: "var(--border-ink)"
-          }}
+          style={{ width: "16px", height: "16px", accentColor: "var(--brand)", cursor: "pointer" }}
         />
-        <label
-          htmlFor="agreeToTerms"
-          style={{
-            fontSize: "var(--text-sm, 13px)",
-            color: "var(--color-text-primary)",
-            lineHeight: "var(--leading-normal, 1.5)",
-            cursor: "pointer"
-          }}
-        >
-          I accept the{" "}
-          <span style={{ fontWeight: 600, textDecoration: "underline" }}>Enterprise Master Agreement</span> and{" "}
-          <span style={{ fontWeight: 600, textDecoration: "underline" }}>Security Compliance Protocols</span>.
-        </label>
-      </div>
+        I agree to the Terms of Service and Privacy Policy
+      </label>
 
-      {/* Form Submission Button */}
-      <div style={{ marginTop: "var(--space-2, 8px)" }}>
-        <Button
-          type="submit"
-          variant="primary"
-          size="md"
-          isLoading={isLoading}
-          style={{ width: "100%", padding: "12px 18px", fontSize: "var(--font-size-button, 15px)" }}
-        >
-          <span>Complete Organization Registration</span>
-          <ArrowRightIcon size={18} />
-        </Button>
-      </div>
+      <Button type="submit" variant="primary" isLoading={isLoading} style={{ width: "100%" }}>
+        <span>Create account</span>
+        <ArrowRightIcon size={16} />
+      </Button>
     </form>
   );
 };
-

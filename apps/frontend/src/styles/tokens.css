@@ -1,80 +1,151 @@
+/* ==========================================================================
+   HOW TO CHANGE COLOURS
+   ----------------------------------------------------------------------
+   Step 1: change a hex code in PALETTE (section A). This is the ONLY place
+           raw hex codes live. Every screen updates.
+   Step 2: to change what a colour is used for, edit section B. Screens use
+           the names in section B, not the hex codes.
+   Never type a hex code anywhere else.
+   ========================================================================== */
+
 :root {
+  /* ========================================================================
+     A. PALETTE (raw colours. Edit hex codes here.)
+     ======================================================================== */
+
+  /* Beige and white (surfaces, lines, page) */
+  --beige-0: #fffdf8;   /* near-white: cards, inputs, dialogs */
+  --beige-1: #fafafa;   /* page background */
+  --beige-2: #ffffff;   /* table header, summary boxes */
+  --beige-3: #d9d0c1;   /* thin lines and dividers */
+  --beige-4: #b8ad9a;   /* input and secondary button borders */
+
+  /* Ink (text) */
+  --ink-1: #2b2430;     /* main text */
+  --ink-2: #6b6372;     /* secondary text */
+
+  /* Plum (brand: buttons, logo) */
+  --plum-1: #f1e7ee;    /* light tint */
+  --plum-2: #c9aebf;    /* border */
+  --plum-3: #714b67;    /* main plum */
+  --plum-4: #5c3c54;    /* darker: hover */
+  --plum-5: #4a3044;    /* darkest: pressed */
+
+  /* Teal (accent: links, focus, info) */
+  --teal-1: #dff1f1;    /* light tint */
+  --teal-2: #8fcfd1;    /* border */
+  --teal-3: #017e84;    /* main teal: focus ring */
+  --teal-4: #01666b;    /* darker: link text */
+
+  /* Status (success = green, warning = amber, danger = rose) */
+  --green-1: #dcfce7;   /* background */
+  --green-2: #86efac;   /* border */
+  --green-3: #10b981;   /* main */
+  --green-4: #14532d;   /* text */
+
+  --amber-1: #fef9c3;
+  --amber-2: #fde047;
+  --amber-3: #f59e0b;
+  --amber-4: #713f12;
+
+  --rose-1: #fee2e2;
+  --rose-2: #fca5a5;
+  --rose-3: #f43f5e;
+  --rose-4: #7f1d1d;
+
+  --white: #ffffff;
+
+  /* ========================================================================
+     B. MEANING (what each colour is used for. Screens use these names.)
+     ======================================================================== */
+
+  /* Page and surfaces */
+  --page: var(--beige-1);            /* whole page background */
+  --card: var(--beige-0);            /* cards, table body, inputs, dialogs */
+  --section: var(--beige-2);         /* table header, summary boxes */
+  --line: var(--beige-3);            /* thin dividers */
+  --line-strong: var(--beige-4);     /* input and secondary button borders */
+
+  /* Text */
+  --text: var(--ink-1);              /* headings and body text */
+  --text-muted: var(--ink-2);        /* helper text, subtitles, table secondary */
+
+  /* Brand (plum): main buttons, logo, active nav underline */
+  --brand: var(--plum-3);            /* button fill */
+  --brand-hover: var(--plum-4);      /* button on hover */
+  --brand-press: var(--plum-5);      /* button when pressed */
+  --brand-tint: var(--plum-1);       /* light plum tiles */
+  --brand-line: var(--plum-2);       /* plum borders */
+  --on-brand: var(--beige-0);        /* text on plum buttons */
+
+  /* Accent (teal): links, focus ring, info badges */
+  --accent: var(--teal-3);           /* focus ring */
+  --accent-text: var(--teal-4);      /* links and info text */
+  --accent-tint: var(--teal-1);      /* info badge background */
+  --accent-line: var(--teal-2);      /* info badge border */
+
+  /* Status: success (green) */
+  --success: var(--green-3);
+  --success-bg: var(--green-1);
+  --success-text: var(--green-4);
+  --success-line: var(--green-2);
+
+  /* Status: warning (amber) */
+  --warning: var(--amber-3);
+  --warning-bg: var(--amber-1);
+  --warning-text: var(--amber-4);
+  --warning-line: var(--amber-2);
+
+  /* Status: danger (rose): errors, destructive buttons */
+  --danger: var(--rose-3);
+  --danger-bg: var(--rose-1);
+  --danger-text: var(--rose-4);
+  --danger-line: var(--rose-2);
+  --on-danger: var(--white);         /* text on danger buttons */
+
+  /* Neutral: idle or unknown status */
+  --neutral-bg: var(--beige-2);
+  --neutral-text: var(--ink-1);
+  --neutral-line: var(--beige-3);
+
   /* ==========================================================================
-     1. TYPOGRAPHY SYSTEM (Inter + JetBrains Mono)
+     C. TYPOGRAPHY
      ========================================================================== */
 
-  /* Font Families */
+  /* Font families */
   --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
-  /* Global Typography Scale */
-  --text-xs: 12px;     /* Technical metadata */
-  --text-sm: 13px;     /* Helper text, secondary copy */
-  --text-base: 15px;   /* Default body text, inputs */
-  --text-lg: 18px;     /* Card headings */
-  --text-xl: 22px;     /* Section headings */
-  --text-2xl: 28px;    /* Page headings */
+  /* Sizes */
+  --text-xs: 12px;     /* badges, technical metadata */
+  --text-sm: 13px;     /* helper text, table headers, small buttons */
+  --text-base: 15px;   /* body, inputs, table cells */
+  --text-lg: 18px;     /* brand name, card headings */
+  --text-xl: 22px;     /* page titles */
+  --text-2xl: 28px;    /* large numbers only */
 
-  /* Font Weights */
+  /* Weights */
   --font-regular: 400;
   --font-medium: 500;
   --font-semibold: 600;
   --font-bold: 700;
 
-  /* Line Heights */
+  /* Line heights */
   --leading-normal: 1.5;
   --leading-tight: 1.25;
 
-  /* Component Specific Typography */
+  /* Component typography */
   --font-size-label: 14px;
   --font-weight-label: 500;
   --font-size-input: 15px;
   --font-weight-input: 400;
-  --font-size-button: 15px;
+  --font-size-button: 14px;
   --font-weight-button: 600;
   --font-size-secondary: 13px;
   --font-size-tech: 12px;
 
   /* ==========================================================================
-     2. COLOUR SYSTEM — matches apps/web/DESIGN.md
-     ========================================================================== */
-
-  --color-ink: #0f172a;
-  --color-canvas: #f8fafc;
-  --color-card: #ffffff;
-  --color-muted: #f1f5f9;
-  --color-subtle: #64748b;
-
-  --color-primary: var(--color-ink);
-  --color-primary-hover: #1e293b;
-
-  --color-text-primary: var(--color-ink);
-  --color-text-secondary: var(--color-subtle);
-  --color-background: var(--color-canvas);
-  --color-surface: var(--color-card);
-  --color-border: #cbd5e1;
-
-  --color-success: #10b981;
-  --color-success-surface: #dcfce7;
-  --color-success-text: #14532d;
-  --color-success-border: #86efac;
-
-  --color-warning: #f59e0b;
-  --color-warning-surface: #fef9c3;
-  --color-warning-text: #713f12;
-  --color-warning-border: #fde047;
-
-  --color-danger: #f43f5e;
-  --color-danger-surface: #fee2e2;
-  --color-danger-text: #7f1d1d;
-  --color-danger-border: #fca5a5;
-
-  --color-neutral-surface: #f1f5f9;
-  --color-neutral-text: #0f172a;
-  --color-neutral-border: #cbd5e1;
-
-  /* ==========================================================================
-     3. SPACING SCALE (Standardised 4px, 8px, 12px, 16px, 24px, 32px, 48px)
+     D. SPACING
      ========================================================================== */
 
   --space-1: 4px;
@@ -86,27 +157,32 @@
   --space-12: 48px;
 
   /* ==========================================================================
-     4. ELEVATION, RADIUS & BORDERS
+     E. LAYOUT
      ========================================================================== */
 
-  --shadow-hard-sm: 1px 1px 0px var(--color-ink);
-  --shadow-hard: 2px 2px 0px var(--color-ink);
-  --shadow-hard-lg: 3px 3px 0px var(--color-ink);
-  --shadow-hard-xl: 4px 4px 0px var(--color-ink);
+  --layout-gutter: 16px;             /* left and right inset for full-width bands */
+  --navbar-height: 48px;
+  --control-height: 40px;            /* inputs and selects share one height */
+  --auth-card-width: 440px;
+  --auth-card-width-wide: 560px;
 
-  --radius-btn: 6px;
-  --radius-input: 6px;
+  /* ==========================================================================
+     F. RADIUS AND BORDERS (flat: hairlines, no shadows)
+     ========================================================================== */
+
+  --radius-btn: 4px;
+  --radius-input: 4px;
   --radius-card: 6px;
-  --radius-badge: 4px;
+  --radius-badge: 999px;
 
-  --border-ink: 1.5px solid var(--color-ink);
-  --border-ink-thick: 2px solid var(--color-ink);
+  --border-default: 1px solid var(--line);
+  --border-strong: 1px solid var(--line-strong);
 
-  --transition-press: all 0.1s ease-in-out;
+  --transition-fast: background-color 0.12s ease, border-color 0.12s ease, color 0.12s ease;
 }
 
 /* ==========================================================================
-   GLOBAL BASE & RESET
+   GLOBAL BASE
    ========================================================================== */
 
 *,
@@ -119,44 +195,187 @@ body {
   margin: 0;
   padding: 0;
   font-family: var(--font-sans);
-  background-color: var(--color-background);
-  color: var(--color-text-primary);
+  background-color: var(--page);
+  color: var(--text);
   font-size: var(--text-base);
   line-height: var(--leading-normal);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Headings Base */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-sans);
-  color: var(--color-text-primary);
+  color: var(--text);
   line-height: var(--leading-tight);
 }
 
-/* Monospace Class for Technical Data & Numerical Alignment */
+a {
+  color: var(--accent-text);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
 .font-mono {
   font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;
 }
 
-/* Pressable Utility */
-.pressable {
-  transition: var(--transition-press);
-}
-
-.pressable:active {
-  transform: translate(1px, 1px);
-  box-shadow: var(--shadow-hard-sm) !important;
-}
-
-/* Form Controls Base Focus */
 input:focus,
 select:focus,
 textarea:focus,
-button:focus-visible {
-  outline: 2px solid var(--color-primary);
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--accent);
   outline-offset: 1px;
+}
+
+/* ==========================================================================
+   BUTTONS
+   primary = brand (plum) | secondary = white with border | outline = plum border
+   danger = red | Change the look of all buttons by editing the section B names.
+   ========================================================================== */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  font-family: var(--font-sans);
+  font-weight: var(--font-weight-button);
+  line-height: 1.2;
+  border: 1px solid transparent;
+  border-radius: var(--radius-btn);
+  cursor: pointer;
+  transition: var(--transition-fast);
+  text-decoration: none;
+}
+
+.btn--md {
+  font-size: var(--font-size-button);
+  padding: 9px var(--space-4);
+}
+
+.btn--sm {
+  font-size: var(--text-sm);
+  padding: 5px var(--space-3);
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.btn--primary {
+  background-color: var(--brand);
+  border-color: var(--brand);
+  color: var(--on-brand);
+}
+.btn--primary:hover:not(:disabled) {
+  background-color: var(--brand-hover);
+  border-color: var(--brand-hover);
+}
+.btn--primary:active:not(:disabled) {
+  background-color: var(--brand-press);
+  border-color: var(--brand-press);
+}
+
+.btn--secondary {
+  background-color: var(--card);
+  border-color: var(--line-strong);
+  color: var(--text);
+}
+.btn--secondary:hover:not(:disabled) {
+  background-color: var(--section);
+}
+
+.btn--outline {
+  background-color: transparent;
+  border-color: var(--brand);
+  color: var(--brand);
+}
+.btn--outline:hover:not(:disabled) {
+  background-color: var(--brand-tint);
+}
+
+.btn--danger {
+  background-color: var(--danger);
+  border-color: var(--danger);
+  color: var(--on-danger);
+}
+.btn--danger:hover:not(:disabled) {
+  filter: brightness(0.93);
+}
+
+/* ==========================================================================
+   NAVBAR LINKS
+   ========================================================================== */
+
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  height: var(--navbar-height);
+  padding: 0 var(--space-3);
+  font-size: var(--text-base);
+  color: var(--text-muted);
+  border-bottom: 2px solid transparent;
+  text-decoration: none;
+  transition: var(--transition-fast);
+}
+.nav-link:hover {
+  color: var(--text);
+  background-color: var(--section);
+  text-decoration: none;
+}
+.nav-link--active {
+  color: var(--text);
+  font-weight: 600;
+  border-bottom-color: var(--brand);
+}
+
+/* ==========================================================================
+   DATA TABLE (full width; first and last cells align to the page gutter)
+   ========================================================================== */
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-family: var(--font-sans);
+}
+.data-table th,
+.data-table td {
+  padding: 10px var(--space-3);
+}
+.data-table th:first-child,
+.data-table td:first-child {
+  padding-left: var(--layout-gutter);
+}
+.data-table th:last-child,
+.data-table td:last-child {
+  padding-right: var(--layout-gutter);
+}
+.data-table thead tr {
+  background-color: var(--section);
+  border-bottom: var(--border-strong);
+}
+.data-table th {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+}
+.data-table td.font-mono {
+  white-space: nowrap;
+}
+.data-table tbody tr {
+  border-bottom: var(--border-default);
+  transition: var(--transition-fast);
+}
+.data-table tbody tr:hover {
+  background-color: var(--page);
 }
 
 @keyframes spin {

@@ -27,7 +27,7 @@ const RequireAuth: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user, isLoading } = useAuth();
   if (isLoading) {
     return (
-      <div style={{ padding: "var(--space-8, 32px)", color: "var(--color-text-secondary)" }}>Checking session...</div>
+      <div style={{ padding: "var(--space-8, 32px)", color: "var(--text-muted)" }}>Checking session...</div>
     );
   }
   if (!user) return <Navigate to="/login" replace />;
@@ -38,7 +38,7 @@ const PublicOnly: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user, isLoading } = useAuth();
   if (isLoading) {
     return (
-      <div style={{ padding: "var(--space-8, 32px)", color: "var(--color-text-secondary)" }}>Checking session...</div>
+      <div style={{ padding: "var(--space-8, 32px)", color: "var(--text-muted)" }}>Checking session...</div>
     );
   }
   if (user) return <Navigate to="/app/records" replace />;
@@ -47,7 +47,7 @@ const PublicOnly: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
 export const App: React.FC = () => {
   return (
-    <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", backgroundColor: "var(--color-canvas)" }}>
+    <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", backgroundColor: "var(--page)" }}>
       <ModeBanner />
       <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
         <Routes>

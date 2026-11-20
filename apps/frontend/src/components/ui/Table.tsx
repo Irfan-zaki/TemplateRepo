@@ -16,6 +16,10 @@ export interface TableProps<T> {
   keyExtractor: (item: T) => string;
 }
 
+/**
+ * Full-bleed list table. It has no outer frame: the page decides where the
+ * table starts and ends, and first/last cells align to --layout-gutter.
+ */
 export function Table<T>({
   columns,
   data,
@@ -26,9 +30,9 @@ export function Table<T>({
     return (
       <div
         style={{
-          padding: "var(--space-8, 32px)",
+          padding: "var(--space-8, 32px) var(--layout-gutter)",
           textAlign: "center",
-          color: "var(--color-text-secondary)",
+          color: "var(--text-muted)",
           fontSize: "var(--text-base, 15px)",
           fontFamily: "var(--font-sans)"
         }}
@@ -39,36 +43,12 @@ export function Table<T>({
   }
 
   return (
-    <div style={{ overflowX: "auto" }}>
-      <table
-        style={{
-          width: "100%",
-          borderCollapse: "collapse",
-          textAlign: "left",
-          fontFamily: "var(--font-sans)"
-        }}
-      >
+    <div style={{ overflowX: "auto", width: "100%" }}>
+      <table className="data-table">
         <thead>
-          <tr
-            style={{
-              borderBottom: "2px solid var(--color-border)",
-              backgroundColor: "var(--color-muted)"
-            }}
-          >
+          <tr>
             {columns.map((col) => (
-              <th
-                key={col.key}
-                style={{
-                  padding: "12px",
-                  fontSize: "var(--text-xs, 12px)",
-                  fontWeight: 600,
-                  letterSpacing: "0.05em",
-                  textTransform: "uppercase",
-                  color: "var(--color-text-primary)",
-                  textAlign: col.align || "left",
-                  width: col.width
-                }}
-              >
+              <th key={col.key} style={{ textAlign: col.align || "left", width: col.width }}>
                 {col.header}
               </th>
             ))}
@@ -76,13 +56,7 @@ export function Table<T>({
         </thead>
         <tbody>
           {data.map((item) => (
-            <tr
-              key={keyExtractor(item)}
-              style={{
-                borderBottom: "1px solid var(--color-border)",
-                transition: "background-color 0.1s ease"
-              }}
-            >
+            <tr key={keyExtractor(item)}>
               {columns.map((col) => {
                 const cellValue = (item as Record<string, unknown>)[col.key];
                 return (
@@ -90,11 +64,8 @@ export function Table<T>({
                     key={col.key}
                     className={col.isMono ? "font-mono" : undefined}
                     style={{
-                      padding: "12px",
-                      fontSize: col.isMono
-                        ? "var(--font-size-tech, 12px)"
-                        : "var(--text-base, 15px)",
-                      color: "var(--color-text-primary)",
+                      fontSize: col.isMono ? "var(--font-size-tech, 12px)" : "var(--text-base, 15px)",
+                      color: "var(--text)",
                       textAlign: col.align || "left"
                     }}
                   >
@@ -109,4 +80,3 @@ export function Table<T>({
     </div>
   );
 }
-

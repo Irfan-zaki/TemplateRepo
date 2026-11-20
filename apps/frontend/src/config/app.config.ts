@@ -8,7 +8,6 @@ export interface AppConfig {
   tagline: string;
   logoText: string;
   version: string;
-  securityLabel: string;
   defaultRoles: AppRoleOption[];
 }
 
@@ -17,7 +16,6 @@ export const APP_CONFIG: AppConfig = {
   tagline: "Enterprise Modern Template",
   logoText: "H",
   version: "v1.0.0",
-  securityLabel: "ISO-27001 AUDITED",
   defaultRoles: [
     { value: "admin", label: "System Administrator" },
     { value: "manager", label: "Team Manager" },

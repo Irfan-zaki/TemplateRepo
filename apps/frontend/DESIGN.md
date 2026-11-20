@@ -1,259 +1,279 @@
-# HackCore UI Design System
+# HackCore UI Design System (Odoo theme)
 
-Single source of truth for `apps/frontend` visual language. **This document is the contract.** Implement CSS tokens and shared components only after this file is agreed; do not invent one-off styles in feature pages.
+Single source of truth for `apps/frontend` visual language. **This document is the contract.** Tokens live in `src/styles/tokens.css`; shared components live in `src/components/ui/`. Do not invent one-off styles in feature pages.
 
-## 1. Philosophy — 30% neo-brutalism + 70% neo-minimalism
+## 1. Philosophy: flat, warm, full-width Odoo
 
-HackCore is the hackathon shell. It must look crisp, authoritative, and fast (Linear / Gumroad / Raycast), not like a meme and not like a washed-out generic SaaS admin.
+HackCore looks like a modern Odoo back-office: warm off-white surfaces, muted plum actions, teal links, tinted pill badges, and lists that run edge to edge.
 
-| Share | Role | What it looks like |
-| --- | --- | --- |
-| **70% neo-minimalism** | Foundation | Clean whites/off-whites, 16–24px gutters, monochromatic slate/zinc, semantic color used only for status |
-| **30% neo-brutalism** | Accents | Razor-sharp 1.5–2px ink borders, **hard offset shadows**, punchy bold headings, `:active` press translation |=
+| Rule | What it means |
+| --- | --- |
+| **Full-bleed** | The shell and every list use the whole browser width. No max-width wrapper and no floating card around a page. |
+| **Flat** | Elevation is a 1px hairline border. No shadows. |
+| **Warm** | Beige and off-white surfaces, never pure white or cool slate. |
+| **Quiet colour** | Plum for actions, teal for links and info, status colours only for status. |
 
-**Not neomorphism.** Soft inner-glow elevation (`box-shadow` blur, dual light/dark insets on cards) is out of scope. Hard shadows (`2px 2px 0 #0f172a`) sit on a spacious white canvas.
-
-**Not classic Odoo.** Do not use Odoo purple (`#714B67`) or Odoo’s rounded enterprise chrome unless product later asks for a brand accent.
-
-**Not 100% brutalism.** No neon yellow, no 4px black borders, no rotated type.
-
-**Not 100% minimalism.** No faint gray `1px #e2e8f0` hairlines as the only structure, no fuzzy `0 1px 3px rgba(0,0,0,0.1)` as the elevation system, no `#2563eb` as the primary action color.
-
-**No gradients. No vibe-coded chrome.** Solid fills only. No emoji in the product UI. Error, success, and warning must use the semantic tokens in this file — never a one-off red/green.
-
-Current app (`src/app/App.tsx` and feature tables) still uses Inter, blue tabs, soft shadows, and banner emoji. Treat that as **legacy**. New UI must follow this file.
+**No gradients. No emoji in the DOM.** Solid fills only. Error, success, and warning use the semantic tokens in section 2.
 
 ---
 
-## 2. Color tokens
+## 2. Colours: how to change them
 
-Use these names when CSS variables are added later (`tokens.css`). Until then, copy the hex values exactly.
+Two steps. Everything lives in `src/styles/tokens.css`.
 
-| Token | Hex | Usage |
+1. **Palette (section A):** raw hex codes, grouped by colour family. Change a hex code here and every screen updates. This is the only place hex codes live.
+2. **Meaning (section B):** what each colour is used for. Screens use these names. Change a name's target here to repoint a use, for example make all buttons teal.
+
+### What each colour is for (plain language)
+
+| Group | Name in code | What it colours |
 | --- | --- | --- |
-| `--color-ink` | `#0f172a` | Borders, primary fill, primary text, hard shadows |
-| `--color-canvas` | `#f8fafc` | Page background |
-| `--color-card` | `#ffffff` | Cards, header, tables, inputs |
-| `--color-muted` | `#f1f5f9` | Table header strip, badge-neutral fill, subtle fills |
-| `--color-subtle` | `#64748b` | Secondary copy, timestamps, helper text |
+| **Page** | `--page` | Whole background |
+| **Surfaces** | `--card` | Cards, table body, inputs, dialogs |
+| | `--section` | Table header, summary boxes, hover on nav |
+| | `--line` / `--line-strong` | Thin dividers / input and secondary button borders |
+| **Text** | `--text` | Headings and main text |
+| | `--text-muted` | Subtitles, helper text, secondary table text |
+| **Brand (plum)** | `--brand` | Main buttons, logo, active tab underline |
+| | `--brand-hover` / `--brand-press` | Same button when hovered / pressed |
+| | `--brand-tint` / `--brand-line` | Light plum tiles and borders |
+| | `--on-brand` | Text on plum buttons |
+| **Accent (teal)** | `--accent` | Focus ring (keyboard outline) |
+| | `--accent-text` | Links and info text |
+| | `--accent-tint` / `--accent-line` | Info badges and tiles |
+| **Success (green)** | `--success`, `--success-bg`, `--success-text`, `--success-line` | Active, paid, approved |
+| **Warning (amber)** | `--warning`, `--warning-bg`, `--warning-text`, `--warning-line` | Pending, mock mode |
+| **Danger (rose)** | `--danger`, `--danger-bg`, `--danger-text`, `--danger-line`, `--on-danger` | Errors, rejected, delete buttons |
+| **Neutral (grey-beige)** | `--neutral-bg`, `--neutral-text`, `--neutral-line` | Idle or unknown status |
 
-### Semantic status (mandatory — do not invent other reds/greens)
+Pattern for status groups: plain name = strong colour, `-bg` = background, `-text` = text on the background, `-line` = border.
 
-Every success, warning, and error surface in the app uses **these tokens only**. Do not use Tailwind `red-*` / `green-*` defaults, `#ef4444`, `#22c55e`, `#fef2f2`, `#991b1b`, or any other palette.
+### Palette (section A)
 
-| Token | Fill / accent | Surface | Text on surface | Border | Usage |
-| --- | --- | --- | --- | --- | --- |
-| `--color-success` | `#10b981` | `#dcfce7` | `#14532d` | `#86efac` | Paid, active, approved, real API mode, success alerts |
-| `--color-warning` | `#f59e0b` | `#fef9c3` | `#713f12` | `#fde047` | Pending, late, mock mode, caution alerts |
-| `--color-danger` | `#f43f5e` | `#fee2e2` | `#7f1d1d` | `#fca5a5` | Rejected, absent, API error, validation error, destructive actions |
-| Neutral | — | `#f1f5f9` | `#0f172a` | `#cbd5e1` | Idle / unknown status |
+| Family | Names | Used for |
+| --- | --- | --- |
+| Beige | `--beige-0` to `--beige-4` | White-ish cards, page, section, lines |
+| Ink | `--ink-1`, `--ink-2` | Main text, secondary text |
+| Plum | `--plum-1` to `--plum-5` | Brand buttons and tints |
+| Teal | `--teal-1` to `--teal-4` | Accent, links, focus |
+| Green | `--green-1` to `--green-4` | Success |
+| Amber | `--amber-1` to `--amber-4` | Warning |
+| Rose | `--rose-1` to `--rose-4` | Danger |
+| White | `--white` | Text on danger buttons |
 
-**Error / success / warning blocks** (page-level API error, empty-success, validation):
+### Rules that do not change
 
-- Background = semantic **surface**
-- Color = semantic **text on surface**
-- Border = `1.5px solid` semantic **border** (or ink `#0f172a` if the block is a primary card)
-- Optional Lucide icon (`CircleAlert`, `CircleCheck`, `TriangleAlert`) in the matching accent hex — never an emoji
-- Hard shadow only if the block is a card, not a full-bleed banner
+- Plum is never a status colour. Teal is never a status colour.
+- No gradients, no shadows, no emoji.
+- Do not use the blue, red or green of other palettes (for example `#2563eb`).
 
-**Mode banners** (mock vs real): warning / success **surface + text + 1.5px ink border**. Label in uppercase Badge-style type. No ⚠️ / 🟢.
-
-**Danger button fill** is `--color-danger` (`#f43f5e`), not `#ef4444`.
-
----
-
-## 3. Typography tokens
+## 3. Typography
 
 Loaded via Google Fonts in `index.html`.
 
-| Role | Family | CSS token | Weights |
-| --- | --- | --- | --- |
-| UI, headings, forms, tables | **Inter** | `--font-sans` | 400 Regular, 500 Medium, 600 Semibold, 700 Bold |
-| IDs, money, technical metadata | **JetBrains Mono** | `--font-mono` | 400 Regular, 500 Medium, 600 Semibold + `font-variant-numeric: tabular-nums` |
+| Role | Family | Token |
+| --- | --- | --- |
+| UI, headings, forms, tables | **Inter** | `--font-sans` |
+| IDs, money, clock times, technical metadata | **JetBrains Mono** + `tabular-nums` | `--font-mono` |
 
-### Type scale
+| Token | Size | Usage |
+| --- | ---: | --- |
+| `--text-xs` | 12px | Badges, technical metadata |
+| `--text-sm` | 13px | Helper text, table headers, small buttons |
+| `--text-base` | 15px | Body, inputs, table cells |
+| `--text-lg` | 18px | Brand name, card headings |
+| `--text-xl` | 22px | Page title in the control panel |
+| `--text-2xl` | 28px | Large numbers only |
 
-| Token | Size | Weight | Usage |
-|---|---:|---:|---|
-| `text-xs` | `12px` | 400 | Technical metadata, table headers |
-| `text-sm` | `13px` | 400 | Helper text, secondary copy |
-| `text-base` | `15px` | 400 | Default body text, inputs |
-| `text-lg` | `18px` | 600 | Card headings |
-| `text-xl` | `22px` | 600 | Section headings, dialog titles |
-| `text-2xl` | `28px` | 600 | Page headings |
-
-Additional rules:
-- Form labels: 14px, weight 500 (`--font-size-label`).
-- Input text: 15–16px, weight 400 (`--font-size-input`).
-- Buttons: 15–16px, weight 600 (`--font-size-button`).
-- Secondary text: 13–14px (`--font-size-secondary`).
-- Technical labels: 12–13px using JetBrains Mono (`--font-size-tech`).
-- Body line-height: 1.5 (`--leading-normal`).
-- Heading line-height: 1.25 (`--leading-tight`).
-
-**Mono is required selectively** for employee codes (`EMP-001`), currency (`$5,000.00`), clock times (`08:55 AM`), and technical IDs. Do not use JetBrains Mono for ordinary paragraphs, form labels, navigation or general user-facing content.
+Buttons: 14px, weight 600. Labels: 14px, weight 500. Table headers: 13px, weight 600, sentence case (not uppercase). Mono is only for IDs, currency, and timestamps.
 
 ---
 
-## 4. Elevation, radius, interaction
+## 4. Elevation, radius, borders
 
-```css
-/* Default micro-elevation (buttons, cards) */
-box-shadow: 2px 2px 0px #0f172a;
-
-/* Pressed */
-transform: translate(1px, 1px);
-box-shadow: 1px 1px 0px #0f172a;
-
-/* Tables / large surfaces */
-box-shadow: 3px 3px 0px #0f172a;
-```
-
-- Border: `1.5px solid #0f172a` (tables and prominent cards may use `2px`).
-- Radius: **6px** on buttons, inputs, cards; **4px** on badges. Not `0`, not `16px`.
-- Transition: `all 0.1s ease-in-out` on pressable controls.
-- **No** blurred elevation (`0 10px 15px rgba(...)`).
-- **No** gradients: no `linear-gradient`, `radial-gradient`, `conic-gradient`, mesh, shine, or Tailwind `from-` / `to-` / `bg-gradient-*`.
-- **No** neomorphic card insets. A *very* light inset on **inputs only** is allowed: `inset 1px 1px 2px rgba(0,0,0,0.05)`.
+- **No shadows.** Separation comes from borders and background steps (canvas to surface).
+- Hairline: `--border-default` (`1px solid #d9d0c1`). Input and secondary-button border: `--border-strong`.
+- Radius: buttons and inputs `4px` (`--radius-btn`, `--radius-input`), cards and tiles `6px` (`--radius-card`), badges pill (`--radius-badge`).
+- Transition: `--transition-fast` (background, border, and colour, 0.12s).
+- Focus: `2px solid --accent` with 1px offset. Never remove it.
 
 ---
 
 ## 5. Spacing
 
-- Layout grid gutters: **16px–24px**.
-- Page / feature padding: `1.5rem`.
-- Header / nav horizontal padding: `2rem`.
-- Table cells: `12px`.
-- Button `md` padding: `10px 18px`; `sm`: `6px 12px`.
-- Badge padding: `2px 8px`.
-- Input padding: `8px 12px`.
-- Control gap (icon + label): `8px`.
+- **Page gutter:** `--layout-gutter` (16px) is the left and right inset for the navbar, control panel, KPI row, and the first and last table cells.
+- Control panel: `12px 16px` padding. KPI row: `16px` vertical.
+- Table cells: `10px 12px`.
+- Button `md`: `9px 16px`. `sm`: `5px 12px`.
+- Badge: `2px 10px`.
+- Control gap (icon and label): `8px`.
 
 ---
 
-## 6. Component contracts
+## 6. Layout: how the page fills the width
 
-Specs only. Do **not** add `src/components/ui/*` in this pass. When implemented, they must match this contract so every feature looks identical.
+This section fixes the "box does not cover the page" problem. The cause was a width-limited, bordered card wrapped around every page. The rule now is:
 
-### Button
+```
+Navbar            full width, canvas background, 1px bottom border
+Control panel     full width, title left, actions right, 1px bottom border
+KPI row           padded with the gutter, tinted tiles (optional)
+List / table      full width, surface background, 1px top and bottom border only
+```
 
-- Variants: `primary` | `secondary` | `danger` | `outline`.
-- Sizes: `sm` | `md` (default `md`).
-- Always: ink border `1.5px`, hard shadow `2px 2px 0`, radius `6px`, weight 600, inline-flex, gap `8px`.
-- `primary`: fill `#0f172a`, text `#ffffff`.
-- `secondary`: fill `#f8fafc`, text `#0f172a`.
-- `danger`: fill `--color-danger` (`#f43f5e`), text `#ffffff`.
-- `outline`: transparent fill, ink text.
-- `:active`: translate + reduced shadow.
-- **No `#2563eb`.** Refresh and primary actions use `primary` (ink), not blue.
+Rules:
+
+1. `AppShell` has **no `max-width`, no margin, no outer card**. `main` is `width: 100%`.
+2. A feature page is a plain `div`. It never adds its own outer padding. Each band (control panel, KPI row, table) applies `--layout-gutter` itself.
+3. **Tables are edge to edge.** No outer border, no rounded frame. The section around the table has a top and bottom hairline. First and last cells align to the gutter.
+4. **Forms and auth cards are the only width-limited elements**, because a form should not stretch. Auth: `--auth-card-width` (440px), signup: `--auth-card-width-wide` (560px). Their page header, background, and footer are still full-bleed.
+5. Detail pages follow the same pattern: control panel on top, then full-width sections. Use a two-column grid inside a section when the content needs it.
+
+---
+
+## 7. Component contracts
+
+### Button (`components/ui/Button.tsx`, styles in `tokens.css`)
+
+- Variants: `primary` (plum fill, off-white text), `secondary` (surface fill, strong border, ink text), `outline` (transparent, plum border and text), `danger` (`--danger` fill, white text).
+- Sizes: `sm` | `md`. Flat, 4px radius, weight 600, 8px gap. Hover darkens, disabled is 55% opacity.
+- **Placement:** create actions in the control panel (right side). State-changing actions in a footer row under the data they act on. Destructive actions are separated, use `danger`, and ask for confirmation.
 
 ### Badge
 
-- Variants: `success` | `warning` | `danger` | `neutral`.
-- Uppercase, weight 700, `0.75rem`, radius `4px`, `1.5px` semantic border, surface fill from the semantic table above.
-- Map domain status here (active → success, pending → warning, rejected/inactive → danger). Do not invent a second badge look per feature.
-- Status copy is text (`ACTIVE`, `ERROR`), not emoji.
+- Variants: `success` | `warning` | `danger` | `info` | `neutral`.
+- Tinted pill: 1px semantic border, surface fill, text-on-surface colour, 12px, weight 600, capitalised. Not uppercase.
+- Map domain status to a variant. Do not invent a second badge look.
 
-### Input
+### Input and Select
 
-- Full width, white fill, ink text, `1.5px solid #0f172a`, radius `6px`, `0.875rem`.
-- Optional light inset shadow (fields only).
-- Focus: keep outline accessible (ink ring or 2px ink border); do not remove focus without a replacement.
+- Surface fill, `--border-strong`, 4px radius, 15px text, `10px 12px` padding. No inset shadow.
+- Error: 1px `--danger` border plus the helper text in `--danger-text`.
 
-### Table
+### Tax select (invoice, quotation, and purchase lines)
 
-- Outer container: `1.5px` (or `2px`) ink border + `3px 3px 0 #0f172a` shadow, radius `6px`, overflow hidden or inner `border-collapse`.
-- Header row: `--color-muted` (`#f8fafc`), bold uppercase headers.
-- Body rows: `#ffffff`, hairline between rows may be `#e2e8f0` **inside** the ink frame (not as the outer border).
-- ID, currency, and time columns: `--font-mono` + `tabular-nums`.
+Use this wherever a line has a **Taxes** field. The user picks from a predefined list. They never type a tax rate by hand.
+
+**Behaviour**
+
+- Closed state: a Select in the line row, placeholder empty, chevron on the right. Same look as Input and Select above.
+- Open state: a flat popover under the field. Surface fill, 1px `--border-default`, 4px radius, no shadow. Options are one per row, 15px text, `10px 12px` padding. Row hover uses `--section`. The selected row shows a check icon in `--accent-text`.
+- Last row is **Search more...** in `--accent-text`. It opens a Dialog with a searchable list of every tax.
+- Keyboard: arrow keys move, Enter selects, Esc closes. Focus ring is the standard 2px `--accent`.
+- Choosing a tax recalculates that line's Amount and the document totals immediately.
+- Single select by default. Multi-select (pills inside the field) only if the brief needs stacked taxes.
+
+**Predefined options (default list)**
+
+| Label | Rate | Notes |
+| --- | ---: | --- |
+| 0% Exempt | 0 | Exempt supply |
+| Nil Rated | 0 | Nil-rated supply |
+| 0% NGST P | 0 | Non-GST purchase |
+| 5% GST P (No ITC) | 5 | CGST + SGST, intra-state |
+| 18% GST P (No ITC) | 18 | CGST + SGST, intra-state |
+| 40% GST P (No ITC) | 40 | CGST + SGST, intra-state |
+| 5% IGST P (No ITC) | 5 | Inter-state |
+| 18% IGST P (No ITC) | 18 | Inter-state |
+
+Sales documents use the same pattern with an `S` suffix (for example `18% GST S`). Show only the taxes that match the document type: purchases show `P`, sales show `S`.
+
+**Where the list comes from**
+
+- The list is reference data in PostgreSQL (`taxes` table, seeded), served by `GET /api/taxes` through `apiClient`. Do not hardcode it inside a component.
+- Mock mode serves the same list from `src/mocks/fixtures/` and a handler, and is listed in `docs/MOCK_INVENTORY.md`.
+- Each tax has `id`, `label`, `rate`, `type` (`gst` | `igst` | `exempt` | `nil`), and `scope` (`purchase` | `sales`).
+- A line stores the tax `id`, not the label, so renaming a label never changes old documents.
+
+### Money input (unit price, amounts)
+
+Use this for **Unit Price**, discounts, and any other currency the user types. The user types plain digits. The field formats them with commas when they leave it.
+
+**Behaviour**
+
+- While typing: accept digits and one decimal point only. Do not insert commas mid-keystroke, so the cursor never jumps.
+- On blur: format with the Indian grouping and two decimals. `100000` becomes `1,00,000.00`. `2500.5` becomes `2,500.50`.
+- On focus: show the raw number again (no commas) so it is easy to edit.
+- Empty stays empty. Never auto-fill `0.00`.
+- Paste: strip commas, spaces, and the currency symbol, then validate.
+- Reject negatives and letters. Show the Input error state and helper text for an invalid value.
+- Submit and store the **plain number** (`100000.5`), never the formatted string. The API receives a number or a decimal string. Format only for display.
+- Display uses `Intl.NumberFormat("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })`. Use one shared helper (`lib/format-money.ts`) for the input and for every read-only amount.
+
+**Look**
+
+- Right-aligned text in `--font-mono` with `tabular-nums`, so decimals line up down the Unit Price and Amount columns.
+- Currency symbol (for example `₹`) is shown on read-only Amount cells and totals, not inside the editable Unit Price field.
+- Totals block (Untaxed, Tax, Total) is right-aligned, mono, with the Total in weight 600.
+
+**Component**
+
+- `components/ui/MoneyInput.tsx` wraps Input. Props: `value` (number or null), `onChange(number | null)`, `currency`, `disabled`, `error`.
+- Feature pages never format money themselves. They call `MoneyInput` and `formatMoney`.
+
+### Table (`components/ui/Table.tsx`, class `.data-table`)
+
+- No outer frame. Header row on `--section` with a strong bottom border. Body rows on surface with hairlines. Row hover uses the page colour.
+- ID, currency, and time columns use `--font-mono` and do not wrap.
+
+### Control panel (`components/ui/PageHeader.tsx`)
+
+- Full-width bar on canvas with a bottom hairline. Title (22px, 600) and optional description on the left, actions on the right.
+
+### Navbar (`AppShell`)
+
+- One bar: brand mark, feature links, then mode badge, user, role badge, sign out.
+- Link: subtle text. Active link: ink text, weight 600, 2px plum underline.
+
+### KPI tile
+
+- Tinted surface (plum, success, or tertiary) with matching 1px border. Value in mono 22px, label in 13px subtle text.
+
+### Alert
+
+- Semantic surface, text, and 1px semantic border. Lucide-style icon in the accent colour. Never emoji.
 
 ---
 
-## 7. Layout
+## 8. Libraries
 
-- Page canvas: `--color-canvas` (`#f8fafc`).
-- App header and main card: `--color-card` (`#ffffff`) with ink border + micro-shadow (replace the current `1px #e2e8f0` header hairline and fuzzy main `box-shadow`).
-- Max content width: `1200px`, centered, with `2rem` top margin.
-- **Nav:** ink color for the active tab, `2px solid #0f172a` underline. Inactive: `--color-subtle`. **Not blue.**
+| Need | Choice |
+| --- | --- |
+| Icons | `lucide-react` style icons (`components/ui/icons.tsx`) with `strokeWidth` 1.75 or 2 |
+| Complex overlays | Radix unstyled, only when a feature needs them |
+| Simple controls | Native React with these tokens |
+| CSS | CSS custom properties in `tokens.css`. No Tailwind. |
 
----
-
-## 8. Libraries (when implementing — do not install in this pass)
-
-| Need | Choice | Notes |
-| --- | --- | --- |
-| Icons | `lucide-react` | `strokeWidth={1.75}` or `2`. Prefer over Heroicons (breadth + stroke consistency). |
-| Complex overlays | Radix unstyled (`dialog`, `dropdown-menu`, `popover`, `tabs`) | Only when a feature needs modal/menu/focus-trap. Not for Button/Input/Badge/Table. |
-| Simple controls | Native React + these tokens | No extra UI kit. |
-| CSS | CSS custom properties (`tokens.css`) | App has no Tailwind; do not add Tailwind unless a later pass explicitly chooses it. |
-
-### Icons rule
-
-Use Lucide **only** for explicit user actions (refresh, approve, export) or visual status indicators. No decorative icons in every table cell or on every nav label.
-
-Radix UI is **not** an icon pack. Heroicons is **not** the primitive library. Do not mix those roles.
+Use icons only for explicit actions or status. No decorative icons in every cell.
 
 ---
 
-## 9. Hard bans: gradients, emoji, off-palette status
+## 9. Hard bans
 
-Agents and humans **must not** ship these in `apps/frontend`.
-
-### No gradients
-
-- Solid token colors only on backgrounds, buttons, banners, badges, borders, and text.
-- Forbidden: `linear-gradient`, `radial-gradient`, `conic-gradient`, CSS `background-image` washes, Tailwind `bg-gradient-*` / `from-*` / `via-*` / `to-*`, glossy overlays, aurora/mesh blobs.
-
-### No vibe-coded emoji in the UI
-
-The product UI is enterprise HR/Payroll. Emoji make it look generated and unprofessional.
-
-- Forbidden in rendered UI (JSX, `aria-label` that displays, buttons, banners, empty states, table cells, titles): ⚠️ ✨ 🚀 🎉 ✅ ❌ 🟢 🔴 💡 🔥 and any other emoji/pictograph.
-- Use Lucide for actions/status, or the Badge + semantic tokens.
-- Emoji are allowed in this markdown file and in code comments only if they do not reach the DOM.
-
-### Strict color adherence for states
-
-- Success / warning / error **always** use the semantic table in section 2 (fill, surface, text, border).
-- Do not mix: green fill with a random red border; `#22c55e` “success”; Bootstrap / default browser red; blue for errors.
-- Loading and empty states use ink + `--color-subtle` on canvas/card — not a new accent.
+- **Gradients** of any kind: `linear-gradient`, `radial-gradient`, `conic-gradient`, `bg-gradient-*`, `from-` / `via-` / `to-`, shine or mesh overlays.
+- **Emoji in the rendered UI** (JSX, buttons, banners, empty states, table cells, titles). Use icons or Badge text.
+- **Off-palette status colours.** Success, warning, and error use only the semantic table in section 2.
+- **Shadows and thick borders.** The theme is flat.
+- **Second styles.** No separate badge, button, or alert look inside a feature folder.
+- **Fake data.** No hardcoded business rows, no `setTimeout` fake success, no fallback data when an API fails (see `AGENTS.md`).
 
 ---
 
-## 10. Do / don’t
+## 10. Do / don't
 
 **Do**
 
-- Use ink (`#0f172a`) as primary, border, and shadow.
-- Use semantic surfaces **and** semantic text/border for status, errors, and success.
+- Let every list and control panel run edge to edge.
+- Use plum for the one main action, teal for links, and status tokens for status.
 - Put money, IDs, and times in JetBrains Mono.
-- Keep whitespace generous; let the 70% minimalism carry density.
-- Use Lucide or Badge text instead of emoji.
+- Pick taxes from the predefined Tax select. Format typed money with `MoneyInput`.
+- Put every colour in `tokens.css` and reference it by variable.
 
-**Don’t**
+**Don't**
 
-- Gradients of any kind.
-- Emoji in the product UI (banners, buttons, empty states, tables).
-- One-off blues (`#2563eb`), random reds/greens, or Odoo purple.
-- Heroicons, extra icon packs, or icons-for-decoration.
-- A second badge/button/alert style inside a feature folder.
-- Blurry shadows as elevation; neomorphic insets on cards.
-- Neon / 4px / rotated brutalism.
-- `setTimeout` to fake success (see workspace mock-data rules).
-- Hardcoded sample employees, payroll, or leave rows in components.
-- Local fallback data when an API fails.
-
----
-
-## 11. Implementation backlog (out of this pass)
-
-This file is docs only. Later work, in order:
-
-1. Add Google Fonts (Inter + JetBrains Mono) in `index.html`.
-2. Add `src/styles/tokens.css` (or equivalent) with the CSS variables above; import from `main.tsx`.
-3. Install `lucide-react` when the first action icon is needed.
-4. Add Radix packages only with the first dialog/dropdown/popover.
-5. Create `src/components/ui/Button.tsx`, `Badge.tsx`, `Input.tsx`, `Table.tsx` from these contracts (classNames + tokens, not one-off inline palettes).
-6. Restyle `App.tsx` (banner, header, nav) and the four feature pages/tables: Employees, Attendance, Time Off, Payroll.
-
-Until that pass, do not treat existing inline styles as the design system.
+- Wrap a page in a width-limited bordered card.
+- Add padding around a table that makes it float inside the page.
+- Use plum or teal to mean success, warning, or error.
+- Use pure white or cool slate backgrounds.
+- Let users type a tax rate as free text, or hardcode the tax list in a component.
+- Store a comma-formatted string such as `"1,00,000.00"` in state or send it to the API.

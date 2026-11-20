@@ -1,10 +1,11 @@
 import React from "react";
 
 export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
-  variant?: "success" | "warning" | "danger" | "neutral";
+  variant?: "success" | "warning" | "danger" | "info" | "neutral";
   children: React.ReactNode;
 }
 
+/** Tinted pill badge (Odoo style). `info` uses the tertiary (teal) palette. */
 export const Badge: React.FC<BadgeProps> = ({
   variant = "neutral",
   children,
@@ -13,24 +14,29 @@ export const Badge: React.FC<BadgeProps> = ({
 }) => {
   const variantStyles: Record<string, React.CSSProperties> = {
     success: {
-      backgroundColor: "var(--color-success-surface)",
-      color: "var(--color-success-text)",
-      border: "1.5px solid var(--color-success-border)"
+      backgroundColor: "var(--success-bg)",
+      color: "var(--success-text)",
+      border: "1px solid var(--success-line)"
     },
     warning: {
-      backgroundColor: "var(--color-warning-surface)",
-      color: "var(--color-warning-text)",
-      border: "1.5px solid var(--color-warning-border)"
+      backgroundColor: "var(--warning-bg)",
+      color: "var(--warning-text)",
+      border: "1px solid var(--warning-line)"
     },
     danger: {
-      backgroundColor: "var(--color-danger-surface)",
-      color: "var(--color-danger-text)",
-      border: "1.5px solid var(--color-danger-border)"
+      backgroundColor: "var(--danger-bg)",
+      color: "var(--danger-text)",
+      border: "1px solid var(--danger-line)"
+    },
+    info: {
+      backgroundColor: "var(--accent-tint)",
+      color: "var(--accent-text)",
+      border: "1px solid var(--accent-line)"
     },
     neutral: {
-      backgroundColor: "var(--color-neutral-surface)",
-      color: "var(--color-neutral-text)",
-      border: "1.5px solid var(--color-neutral-border)"
+      backgroundColor: "var(--neutral-bg)",
+      color: "var(--neutral-text)",
+      border: "1px solid var(--neutral-line)"
     }
   };
 
@@ -41,14 +47,14 @@ export const Badge: React.FC<BadgeProps> = ({
         alignItems: "center",
         justifyContent: "center",
         gap: "4px",
-        padding: "2px var(--space-2, 8px)",
+        padding: "2px 10px",
         borderRadius: "var(--radius-badge)",
         fontSize: "var(--text-xs, 12px)",
-        fontWeight: "var(--font-bold, 700)" as unknown as number,
-        letterSpacing: "0.03em",
-        textTransform: "uppercase",
+        fontWeight: "var(--font-semibold, 600)" as unknown as number,
+        textTransform: "capitalize",
+        whiteSpace: "nowrap",
         fontFamily: "var(--font-sans)",
-        lineHeight: 1.2,
+        lineHeight: 1.4,
         ...variantStyles[variant],
         ...style
       }}
@@ -58,4 +64,3 @@ export const Badge: React.FC<BadgeProps> = ({
     </span>
   );
 };
-

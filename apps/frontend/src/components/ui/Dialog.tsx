@@ -28,7 +28,7 @@ export const Dialog: React.FC<DialogProps> = ({ open, title, onClose, children }
       style={{
         position: "fixed",
         inset: 0,
-        backgroundColor: "rgba(15, 23, 42, 0.45)",
+        backgroundColor: "rgba(43, 36, 48, 0.45)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -43,10 +43,9 @@ export const Dialog: React.FC<DialogProps> = ({ open, title, onClose, children }
         onClick={(event) => event.stopPropagation()}
         style={{
           width: "min(520px, 100%)",
-          backgroundColor: "var(--color-card)",
-          border: "var(--border-ink-thick)",
+          backgroundColor: "var(--card)",
+          border: "var(--border-strong)",
           borderRadius: "var(--radius-card)",
-          boxShadow: "var(--shadow-hard-lg)",
           padding: "var(--space-6, 24px)",
           display: "flex",
           flexDirection: "column",
@@ -55,7 +54,7 @@ export const Dialog: React.FC<DialogProps> = ({ open, title, onClose, children }
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "12px" }}>
           <h2 style={{ margin: 0, fontSize: "var(--text-xl, 22px)", fontWeight: 600 }}>{title}</h2>
-          <Button type="button" variant="outline" size="sm" onClick={onClose}>
+          <Button type="button" variant="secondary" size="sm" onClick={onClose}>
             Close
           </Button>
         </div>
